@@ -1,0 +1,167 @@
+{
+  "schema": "neptunesdr.p210-firmware-interface/v1",
+  "repository": {
+    "name": "Atom-NeptuneSDR_Firmwave",
+    "url": "https://github.com/PhysicistJohn/Atom-NeptuneSDR_Firmwave"
+  },
+  "profile": "qemu-development",
+  "flashable": false,
+  "status": "executable development contract; physical-board validation pending",
+  "board": {
+    "soc": "xc7z020clg400-1",
+    "cpu": "dual Cortex-A9",
+    "radio": "AD9361",
+    "rx_channels": 2,
+    "tx_channels": 2,
+    "ddr_bus_width_bits": 16
+  },
+  "wideband_capture": {
+    "sample_rate_hz": 61440000,
+    "rf_bandwidth_hz": 50000000,
+    "iio_sample_slot_bits": 16,
+    "adc_significant_bits": 12,
+    "adc_full_scale_code": 2048,
+    "complex_sample_bytes_per_channel": 4,
+    "channel_layout": "time-major channel-interleaved signed IQ16 little-endian"
+  },
+  "host_services": {
+    "iiod": {
+      "transport": "TCP",
+      "port": 30431,
+      "implementation": "released ADI libiio/iiod userspace"
+    },
+    "spectrum": {
+      "transport": "TCP",
+      "port": 30432,
+      "implementation": "neptune_fft_streamer"
+    }
+  },
+  "pl_fft_abi": {
+    "description": "proposed ARM-visible P210 PL accelerator contract implemented by the digital twin",
+    "base_address": "0x7c450000",
+    "span_bytes": "0x1000",
+    "register_width_bits": 32,
+    "register_byte_order": "little-endian",
+    "register_alignment_bytes": 4,
+    "interrupt_gic_spi": 58,
+    "interrupt_trigger": "active-high level",
+    "identity": "0x5446464e",
+    "version": "0x00010000",
+    "registers": {
+      "ID": "0x000",
+      "VERSION": "0x004",
+      "CAPABILITIES": "0x008",
+      "CONTROL": "0x00c",
+      "STATUS": "0x010",
+      "ERROR_CODE": "0x014",
+      "LOG2_N": "0x018",
+      "CHANNEL_COUNT": "0x01c",
+      "CHANNEL_MASK": "0x020",
+      "INPUT_ADDR": "0x024",
+      "INPUT_BYTES": "0x028",
+      "OUTPUT_ADDR": "0x02c",
+      "OUTPUT_BYTES": "0x030",
+      "SEQUENCE": "0x034",
+      "RESULT_SEQUENCE": "0x038",
+      "COMPLETED_LO": "0x03c",
+      "COMPLETED_HI": "0x040",
+      "ERROR_COUNT_LO": "0x044",
+      "ERROR_COUNT_HI": "0x048",
+      "BINS_WRITTEN": "0x04c",
+      "MIN_LOG2_N": "0x050",
+      "MAX_LOG2_N": "0x054"
+    },
+    "control_bits": {
+      "START": "0x00000001",
+      "SOFT_RESET": "0x00000002",
+      "IRQ_ENABLE": "0x00000100"
+    },
+    "status_bits": {
+      "BUSY": "0x00000001",
+      "DONE": "0x00000002",
+      "ERROR": "0x00000004",
+      "IRQ_PENDING": "0x00000008"
+    },
+    "capability_bits": {
+      "IQ16_LE": "0x00000001",
+      "POWER_U32_LE": "0x00000002",
+      "TWO_CHANNEL": "0x00000004",
+      "SCALE_EACH_STAGE": "0x00000008",
+      "NATURAL_ORDER": "0x00000010",
+      "COMPLETION_IRQ": "0x00000020"
+    },
+    "capabilities_value": "0x0000003f",
+    "guest_required_capabilities_value": "0x0000001f",
+    "error_codes": {
+      "NONE": 0,
+      "BUSY": 1,
+      "BAD_LOG2_N": 2,
+      "BAD_CHANNELS": 3,
+      "BAD_ALIGNMENT": 4,
+      "BAD_LENGTH": 5,
+      "ADDRESS_RANGE": 6,
+      "ALLOCATION": 7,
+      "DMA_READ": 8,
+      "DMA_WRITE": 9,
+      "BUFFER_OVERLAP": 10
+    },
+    "minimum_log2_n": 10,
+    "maximum_log2_n": 16,
+    "firmware_log2_n": 16,
+    "minimum_channels": 1,
+    "maximum_channels": 2,
+    "firmware_channels": 2,
+    "firmware_channel_mask": "0x00000003",
+    "dma_address_alignment_bytes": 4,
+    "input_address": "0x18000000",
+    "output_address": "0x18100000",
+    "input_bytes_formula": "(1 << LOG2_N) * CHANNEL_COUNT * 4",
+    "output_bytes_formula": "(1 << LOG2_N) * popcount(CHANNEL_MASK) * 4",
+    "firmware_input_bytes": 524288,
+    "firmware_output_bytes": 524288,
+    "input_format": "IQ16 little-endian, time-major and channel-interleaved",
+    "input_order": "I0[n], Q0[n], I1[n], Q1[n], then n+1",
+    "output_format": "uint32 little-endian linear power, channel-major, natural bin order",
+    "output_order": "all bins for selected channels in ascending channel number",
+    "buffer_overlap_allowed": false,
+    "scaling": "divide every radix-2 butterfly result by two",
+    "dma_coherency": "non-coherent; physical hardware requires DMA-safe allocation and cache maintenance"
+  },
+  "spectrum_stream": {
+    "protocol": "NSFT-v1",
+    "packet_version": 1,
+    "header_bytes": 68,
+    "trailer_crc_bytes": 4,
+    "payload_encoding": "UINT16_LOG_POWER",
+    "payload_encoding_code": 2,
+    "payload_bytes_per_bin": 2,
+    "payload_db_floor": -200.0,
+    "payload_db_step": 0.01,
+    "fft_bins_per_channel": 65536,
+    "channel_packets_per_capture": 2,
+    "packet_bytes_per_channel": 131144
+  },
+  "guest_program": {
+    "source": "firmware/neptune_fft_streamer.c",
+    "toolchain": "zig-0.14.1",
+    "target": "arm-linux-musleabihf",
+    "cpu": "cortex_a9",
+    "static": true,
+    "required_fft_capabilities_value": "0x0000001f",
+    "iio_phy_name": "ad9361-phy",
+    "iio_capture_name": "cf-ad9361-lpc",
+    "linux_memory_limit": "384M"
+  },
+  "runtime_inputs": {
+    "lock": "src/neptunesdr_firmwave/data/firmware-lock.json",
+    "composition": "public P210 kernel/device tree plus official PlutoSDR v0.39 initramfs",
+    "classification": "ABI-compatible experimental composition; not vendor P210 firmware"
+  },
+  "produced_artifacts": {
+    "runtime_manifest_schema": "neptunesdr.firmwave.runtime-manifest/v1",
+    "kernel": "p210-kernel.bin",
+    "devicetree": "p210-devicetree.dtb",
+    "rootfs": "pluto-v0.39-rootfs.cpio.gz",
+    "fft_runtime": "qemu-fft-runtime.cpio.gz"
+  }
+}

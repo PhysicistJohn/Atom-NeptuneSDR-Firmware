@@ -30,6 +30,7 @@ def _twin_acceptance_source_state(root: Path):
     branch = run(("git", "rev-parse", "--abbrev-ref", "HEAD")).decode().strip()
     diff = run(("git", "diff", "--binary", "--no-ext-diff", "HEAD", "--"))
     untracked_raw = run(("git", "ls-files", "--others", "--exclude-standard", "-z"))
+    index_tags_raw = run(("git", "ls-files", "-v", "-z"))
     untracked = []
     for encoded in untracked_raw.split(b"\0"):
         if not encoded:
@@ -42,19 +43,32 @@ def _twin_acceptance_source_state(root: Path):
             )
         else:
             untracked.append({"path": relative, "type": "non-regular"})
+    hidden_index_flags = []
+    for encoded in index_tags_raw.split(b"\0"):
+        if not encoded:
+            continue
+        tag = chr(encoded[0])
+        if tag == "S" or tag.islower():
+            hidden_index_flags.append({"path": os.fsdecode(encoded[2:]), "tag": tag})
     submodules = run(("git", "submodule", "status", "--recursive"))
     material = {
         "commit": commit,
         "branch": branch,
         "tracked_diff_sha256": hashlib.sha256(diff).hexdigest(),
         "tracked_diff_bytes": len(diff),
+        "hidden_index_flags": hidden_index_flags,
         "untracked": untracked,
         "submodule_status_sha256": hashlib.sha256(submodules).hexdigest(),
         "submodule_status": submodules.decode("utf-8", "replace").splitlines(),
     }
     encoded = json.dumps(material, sort_keys=True, separators=(",", ":")).encode()
     material["state_sha256"] = hashlib.sha256(encoded).hexdigest()
-    material["clean"] = not diff and not untracked and not submodules.strip()
+    material["clean"] = (
+        not diff
+        and not hidden_index_flags
+        and not untracked
+        and not submodules.strip()
+    )
     return material
 
 
@@ -88,6 +102,32 @@ class ProvenanceTests(unittest.TestCase):
         self.assertTrue(identity["clean"])
         self.assertRegex(identity["state_sha256"], r"^[0-9a-f]{64}$")
 
+    def test_hidden_index_flags_cannot_mask_worktree_changes(self):
+        cases = (
+            ("--skip-worktree", "S"),
+            ("--assume-unchanged", "h"),
+        )
+        for flag, expected_tag in cases:
+            with self.subTest(flag=flag), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                _repository(root)
+                clean_state = _source_state(root)
+                subprocess.run(
+                    ("git", "update-index", flag, "tracked.bin"),
+                    cwd=root,
+                    check=True,
+                )
+                (root / "tracked.bin").write_bytes(b"hidden change")
+                hidden_state = _source_state(root)
+                self.assertFalse(hidden_state["clean"])
+                self.assertEqual(
+                    hidden_state["hidden_index_flags"],
+                    [{"path": "tracked.bin", "tag": expected_tag}],
+                )
+                self.assertNotEqual(
+                    hidden_state["state_sha256"], clean_state["state_sha256"]
+                )
+
 
 class CLITests(unittest.TestCase):
     def _run(self, arguments):
@@ -114,6 +154,16 @@ class CLITests(unittest.TestCase):
         self.assertEqual(code, 2)
         self.assertEqual(output, "")
         self.assertIn("unknown locked artifact", error)
+
+    def test_source_identity_outside_git_fails_without_a_traceback(self):
+        with tempfile.TemporaryDirectory() as directory:
+            code, output, error = self._run(
+                ["source-identity", "--root", directory, "--json"]
+            )
+        self.assertEqual(code, 2)
+        self.assertEqual(output, "")
+        self.assertIn("source identity requires a Git checkout", error)
+        self.assertNotIn("Traceback", error)
 
 
 if __name__ == "__main__":

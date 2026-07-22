@@ -11,3 +11,7 @@ class FirmwareFormatError(FirmwaveError, ValueError):
 
 class InterfaceError(FirmwaveError, ValueError):
     """The published firmware interface is absent or malformed."""
+
+
+class ProvenanceError(FirmwaveError, ValueError):
+    """A requested source identity cannot be established from Git."""

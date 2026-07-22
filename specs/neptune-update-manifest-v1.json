@@ -1,0 +1,15 @@
+{
+  "schema": "neptunesdr.update-manifest-schema/v1",
+  "manifest_schema": "neptunesdr.update-manifest/v1",
+  "signature_algorithm": "Ed25519",
+  "signed_representation": "canonical ASCII JSON with signature_base64 removed",
+  "target_media": "removable SD A/B slots only",
+  "qspi_update_allowed": false,
+  "required_artifact_fields": ["path", "role", "bytes", "sha256"],
+  "required_roles": ["boot", "rootfs"],
+  "artifact_uniqueness": "canonical paths, artifact roles, and resolved regular-file device/inode identities are each unique",
+  "path_admission": "open artifact root, every relative parent component, and final files with no-follow descriptor-relative traversal; reject symlinked roots, parents, final files, and non-regular files",
+  "admission_race_rule": "hash an opened descriptor and require unchanged device, inode, mode, size, mtime, and ctime before/after; snapshot the no-follow trusted public key before signature verification",
+  "rollback_rule": "rollback_index must strictly exceed the accepted device index",
+  "activation_rule": "the updater stages only the inactive slot; boot success promotes it"
+}

@@ -1,0 +1,105 @@
+{
+  "artifacts": {
+    "board_profile": {
+      "bytes": 2652,
+      "path": "board/p210/profile.json",
+      "sha256": "5485abfd4cc4a4246cc281dea70e980e474b99f181f63a8cba64db5c199e5833"
+    },
+    "c_binding": {
+      "bytes": 111076,
+      "path": "protocol/generated/neptune_edge_v1.h",
+      "sha256": "8ec4ab246b4767079e60a1bef7d362914e66dfe23e73872e0b74b06e561b10db"
+    },
+    "calibration_schema": {
+      "bytes": 1274,
+      "path": "specs/neptune-calibration-bundle-v1.json",
+      "sha256": "a4afeee42aec83db2d469082819277989a89434d8c3479c980354011075e914c"
+    },
+    "control_schema": {
+      "bytes": 27601,
+      "path": "specs/neptune-edge-control-v1.json",
+      "sha256": "730622eefad05bb2b4937b6c1b30d71b48d0be1d3c838b8c37bd6aa243ae839e"
+    },
+    "data_schema": {
+      "bytes": 23729,
+      "path": "specs/neptune-edge-data-v1.json",
+      "sha256": "78a56d6567a95b2cb5fe471803d9cfe287ade65b38c404b60a8910b6fcf7cb7c"
+    },
+    "golden_vectors": {
+      "bytes": 6245,
+      "path": "protocol/golden/neptune_edge_v1_vectors.json",
+      "sha256": "acca0d6ba988cffb6bf654c9a71e916d9f87ca32a1fa411b0a3e8991248cc433"
+    },
+    "hardware_manifest_schema": {
+      "bytes": 7247,
+      "path": "specs/p210-hardware-manifest-v1.schema.json",
+      "sha256": "14458f66ea583621ee009f4954832f98b61dabcb6c0ab442eb4b89b91c6a7d59"
+    },
+    "pl_kernel_header": {
+      "bytes": 9272,
+      "path": "ps/include/neptune_pl_registers_v1.h",
+      "sha256": "a2118a87d5d58ddacaa4734d8f941e49d93c7cf04cb655dd7c466b3eee98efa6"
+    },
+    "pl_register_schema": {
+      "bytes": 10068,
+      "path": "specs/neptune-pl-registers-v1.json",
+      "sha256": "b73bf1c6f916a0ddf015025babf77545f6da88276dd2da9945f6abfe6a2f9087"
+    },
+    "pl_systemverilog_package": {
+      "bytes": 10780,
+      "path": "hdl/rtl/generated/neptune_pl_registers_v1_pkg.sv",
+      "sha256": "9ce34bb91d794f8de754a0d7ff167404fa53dff680544125dbedb9653fee9928"
+    },
+    "pl_userspace_header": {
+      "bytes": 9272,
+      "path": "protocol/generated/neptune_pl_registers_v1.h",
+      "sha256": "a2118a87d5d58ddacaa4734d8f941e49d93c7cf04cb655dd7c466b3eee98efa6"
+    },
+    "python_binding": {
+      "bytes": 43358,
+      "path": "protocol/generated/neptune_edge_v1.py",
+      "sha256": "c27e14185ba0e66e48112ab9f0ffa5f57c5774ac2228692e8ffc8a0d74e6200b"
+    },
+    "stream_uapi": {
+      "bytes": 10193,
+      "path": "ps/include/neptune_stream_uapi.h",
+      "sha256": "7805444af99461858d851f00b85fd4bbb88f620b2a818f1bde079da962332c0c"
+    },
+    "update_schema": {
+      "bytes": 1129,
+      "path": "specs/neptune-update-manifest-v1.json",
+      "sha256": "b3fcb49325c2b6872a817936008b4a44849cd64dc3eb71fd02b4856b0de7fba3"
+    }
+  },
+  "clock_contract": {
+    "continuous_ethernet_sample_rate_hz": 55000000,
+    "ingress_sample_rate_hz": 61440000,
+    "resampler_decimation": 1536,
+    "resampler_interpolation": 1375,
+    "timestamp_timebase_hz": 61440000
+  },
+  "execution_target": "HamGeek Neptune/P210 with XC7Z020 and AD9361",
+  "legacy_compatibility": {
+    "interface": "specs/p210-firmware-interface-v1.json",
+    "profile": "qemu-development",
+    "relationship": "additive maintenance interface; not the Edge high-rate architecture"
+  },
+  "physical_validation_required": true,
+  "profile": "p210-edge-custom-v0",
+  "protocol_version": 1,
+  "release_ready": false,
+  "safety_contract": {
+    "installation_medium": "removable-sd",
+    "persistent_tx_inhibit": true,
+    "qspi_write_allowed": false,
+    "raw_bypass_required": true,
+    "tx_enabled_at_boot": false
+  },
+  "schema": "neptunesdr.edge.firmware-profile/v1",
+  "transport_contract": {
+    "continuous_baseline": "one RX channel S8/S8BF at 55 MSPS with MTU 9000",
+    "control": "USB NECP-v1",
+    "data": "Gigabit Ethernet UDP NEDP-v1",
+    "onboard_ingress": "full 61.44 MSPS per enabled AD9361 RX channel"
+  }
+}

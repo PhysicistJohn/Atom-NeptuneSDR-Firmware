@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "neptunesdr-firmwave"
 version = "1.0.0"
-description = "Audited firmware inputs and QEMU-development runtime for NeptuneSDR/HAMGEEK P210"
+description = "Audit/control tooling and versioned Neptune Edge custom-firmware contracts for the HAMGEEK P210"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
@@ -35,5 +35,53 @@ where = ["src"]
 neptunesdr_firmwave = ["data/*.json"]
 
 [tool.setuptools.data-files]
-"share/neptunesdr-firmwave/specs" = ["specs/p210-firmware-interface-v1.json"]
-"share/neptunesdr-firmwave/docs" = ["docs/P210_FFT_ABI.md"]
+"share/neptunesdr-firmwave/specs" = [
+  "specs/neptune-calibration-bundle-v1.json",
+  "specs/neptune-edge-control-v1.json",
+  "specs/neptune-edge-data-v1.json",
+  "specs/neptune-pl-registers-v1.json",
+  "specs/neptune-update-manifest-v1.json",
+  "specs/p210-firmware-interface-v1.json",
+  "specs/p210-hardware-manifest-v1.schema.json",
+]
+"share/neptunesdr-firmwave/docs" = [
+  "docs/ACCEPTANCE.md",
+  "docs/BOARD_BUILD.md",
+  "docs/CALIBRATION.md",
+  "docs/HARDWARE_EVIDENCE.md",
+  "docs/NEPTUNE_EDGE_ARCHITECTURE.md",
+  "docs/P210_FFT_ABI.md",
+  "docs/PROVENANCE.md",
+  "docs/RECOVERY.md",
+]
+"share/neptunesdr-firmwave/board/p210" = [
+  "board/p210/README.md",
+  "board/p210/build-plan.json",
+  "board/p210/profile.json",
+  "board/p210/source-lock.json",
+  "board/p210/toolchain-lock.json",
+]
+"share/neptunesdr-firmwave/board/p210/config" = [
+  "board/p210/config/calibration-defaults.json",
+  "board/p210/config/device-policy.json",
+  "board/p210/config/kernel-required.json",
+  "board/p210/config/rootfs-policy.json",
+  "board/p210/config/u-boot.env",
+]
+"share/neptunesdr-firmwave/protocol" = ["protocol/README.md"]
+"share/neptunesdr-firmwave/protocol/generated" = [
+  "protocol/generated/neptune_edge_profile_v1.json",
+  "protocol/generated/neptune_edge_v1.h",
+  "protocol/generated/neptune_edge_v1.py",
+  "protocol/generated/neptune_pl_registers_v1.h",
+]
+"share/neptunesdr-firmwave/ps/include" = [
+  "ps/include/neptune_pl_registers_v1.h",
+  "ps/include/neptune_stream_uapi.h",
+]
+"share/neptunesdr-firmwave/hdl/rtl/generated" = [
+  "hdl/rtl/generated/neptune_pl_registers_v1_pkg.sv",
+]
+"share/neptunesdr-firmwave/protocol/golden" = [
+  "protocol/golden/neptune_edge_v1_vectors.json",
+]

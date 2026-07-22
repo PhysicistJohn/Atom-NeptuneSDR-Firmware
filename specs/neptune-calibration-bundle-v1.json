@@ -1,0 +1,31 @@
+{
+  "schema": "neptunesdr.calibration-bundle-schema/v1",
+  "bundle_schema": "neptunesdr.calibration-bundle/v1",
+  "coefficient_format": "signed little-endian Q2.30 integers represented as JSON numbers",
+  "maximum_coefficients_per_bundle": 262144,
+  "calibration_types": [
+    "DC_OFFSET",
+    "IQ_IMBALANCE",
+    "CHANNEL_AMPLITUDE_PHASE",
+    "FREQUENCY_RESPONSE_EQ",
+    "TEMPERATURE_COMPENSATION"
+  ],
+  "key_fields": [
+    "device_serial",
+    "channel_mask",
+    "frequency_min_hz",
+    "frequency_max_hz",
+    "sample_rate_hz",
+    "bandwidth_hz",
+    "gain_min_mdb",
+    "gain_max_mdb",
+    "temperature_min_mc",
+    "temperature_max_mc",
+    "calibration_type",
+    "revision"
+  ],
+  "table_key_rule": "within a bundle, the complete key is device_serial plus channel mask, both frequency endpoints, sample rate, bandwidth, both gain endpoints, both temperature endpoints, calibration type, and bundle revision; coefficient payload is not part of identity",
+  "duplicate_rule": "tables with any distinct key field may coexist; repeated complete keys fail closed even when coefficient payloads differ",
+  "integrity": "SHA-256 over canonical JSON after removing integrity_sha256",
+  "activation": "store activation separately with exact 61.44 MHz sample timestamp"
+}

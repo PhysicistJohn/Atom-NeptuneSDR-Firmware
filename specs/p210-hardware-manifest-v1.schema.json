@@ -1,0 +1,262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/PhysicistJohn/Atom-NeptuneSDR_Firmwave/main/specs/p210-hardware-manifest-v1.schema.json",
+  "title": "NeptuneSDR P210 hardware evidence manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "profile",
+    "flashable",
+    "candidate_id",
+    "description",
+    "requirements",
+    "artifacts"
+  ],
+  "properties": {
+    "schema": {
+      "const": "neptunesdr.p210-hardware-manifest/v1"
+    },
+    "profile": {
+      "const": "hardware-evidence"
+    },
+    "flashable": {
+      "const": false
+    },
+    "candidate_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requirements": {
+      "$ref": "#/$defs/requirements"
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9.-]*$"
+    },
+    "controlName": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "nullablePositiveInteger": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
+    "sourceIdentity": {
+      "type": ["object", "null"],
+      "required": ["repository", "revision", "path"],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "artifactSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lock_artifact", "sha256", "member", "evidence"],
+      "properties": {
+        "lock_artifact": {
+          "$ref": "#/$defs/identifier"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "member": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "contacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["part", "ddr", "radio", "gpio", "build"],
+      "properties": {
+        "part": {
+          "type": ["string", "null"],
+          "pattern": "^xc7z[0-9a-z-]+$"
+        },
+        "ddr": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["bus_width_bits", "size_bytes"],
+          "properties": {
+            "bus_width_bits": {
+              "type": ["integer", "null"],
+              "enum": [16, 32, null]
+            },
+            "size_bytes": {
+              "$ref": "#/$defs/nullablePositiveInteger"
+            }
+          }
+        },
+        "radio": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["digital_interface", "rx_channels", "tx_channels"],
+          "properties": {
+            "digital_interface": {
+              "type": ["string", "null"],
+              "enum": ["cmos", "lvds", null]
+            },
+            "rx_channels": {
+              "type": ["integer", "null"],
+              "enum": [1, 2, null]
+            },
+            "tx_channels": {
+              "type": ["integer", "null"],
+              "enum": [1, 2, null]
+            }
+          }
+        },
+        "gpio": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mio_count", "emio_width", "control_offsets"],
+          "properties": {
+            "mio_count": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "maximum": 256
+            },
+            "emio_width": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "maximum": 256
+            },
+            "control_offsets": {
+              "type": "object",
+              "propertyNames": {
+                "$ref": "#/$defs/controlName"
+              },
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4095
+              }
+            }
+          }
+        },
+        "build": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["vivado_version", "source_identity"],
+          "properties": {
+            "vivado_version": {
+              "type": ["string", "null"],
+              "pattern": "^[0-9]{4}\\.[0-9]+$"
+            },
+            "source_identity": {
+              "$ref": "#/$defs/sourceIdentity"
+            }
+          }
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "role", "source", "contacts"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "role": {
+          "enum": ["boot-handoff", "fpga-handoff", "devicetree"]
+        },
+        "source": {
+          "$ref": "#/$defs/artifactSource"
+        },
+        "contacts": {
+          "$ref": "#/$defs/contacts"
+        }
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_artifacts", "minimum_evidence", "required_gpio_controls"],
+      "properties": {
+        "required_artifacts": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/identifier"
+          }
+        },
+        "minimum_evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "part",
+            "ddr.bus_width_bits",
+            "ddr.size_bytes",
+            "radio.digital_interface",
+            "radio.rx_channels",
+            "radio.tx_channels",
+            "gpio.mio_count",
+            "gpio.emio_width",
+            "build.vivado_version",
+            "build.source_identity"
+          ],
+          "properties": {
+            "part": {"type": "integer", "minimum": 2},
+            "ddr.bus_width_bits": {"type": "integer", "minimum": 2},
+            "ddr.size_bytes": {"type": "integer", "minimum": 2},
+            "radio.digital_interface": {"type": "integer", "minimum": 2},
+            "radio.rx_channels": {"type": "integer", "minimum": 2},
+            "radio.tx_channels": {"type": "integer", "minimum": 2},
+            "gpio.mio_count": {"type": "integer", "minimum": 2},
+            "gpio.emio_width": {"type": "integer", "minimum": 2},
+            "build.vivado_version": {"type": "integer", "minimum": 2},
+            "build.source_identity": {"type": "integer", "minimum": 2}
+          }
+        },
+        "required_gpio_controls": {
+          "type": "array",
+          "minItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "ad9361_en_agc",
+              "ad9361_sync",
+              "ad9361_reset",
+              "ad9361_enable",
+              "ad9361_txnrx",
+              "usb0_reset"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

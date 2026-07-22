@@ -1,0 +1,170 @@
+{
+  "schema": "neptunesdr.pl-register-map/v1",
+  "name": "Neptune Edge programmable-logic registers",
+  "byte_order": "little-endian",
+  "data_width_bits": 32,
+  "address_span_bytes": 4096,
+  "abi_version": 65536,
+  "magic": 1414546766,
+  "registers": [
+    {"name":"MAGIC","offset":0,"access":"RO","reset":1414546766,"description":"ASCII NEPT in little-endian word order"},
+    {"name":"ABI_VERSION","offset":4,"access":"RO","reset":65536,"description":"major 1, minor 0"},
+    {"name":"BUILD_ID_LO","offset":8,"access":"RO","reset":0,"description":"low build identifier"},
+    {"name":"BUILD_ID_HI","offset":12,"access":"RO","reset":0,"description":"high build identifier"},
+    {"name":"CAPABILITIES","offset":16,"access":"RO","reset":0,"description":"implemented capability bitset"},
+    {"name":"GLOBAL_STATUS","offset":20,"access":"RO","reset":0,"description":"PLL, interface, stream, and fault state"},
+    {"name":"GLOBAL_FAULTS","offset":24,"access":"W1C","reset":0,"description":"sticky observable fault bits"},
+
+    {"name":"SAMPLE_COUNT_LO","offset":256,"access":"RO","reset":0,"description":"coherent low 32 sample-counter bits"},
+    {"name":"SAMPLE_COUNT_HI","offset":260,"access":"RO","reset":0,"description":"latched high 32 sample-counter bits"},
+    {"name":"SAMPLE_EPOCH","offset":264,"access":"RO","reset":0,"description":"increments on explicit counter set"},
+    {"name":"DISCONTINUITY_REVISION","offset":268,"access":"RO","reset":0,"description":"increments once per continuity break"},
+    {"name":"SAMPLE_SET_LO","offset":272,"access":"RW","reset":0,"description":"counter-set shadow low word"},
+    {"name":"SAMPLE_SET_HI","offset":276,"access":"RW","reset":0,"description":"counter-set shadow high word"},
+    {"name":"SAMPLE_COMMAND","offset":280,"access":"WO","reset":0,"description":"bit zero explicitly applies counter set"},
+
+    {"name":"CONFIG_SHADOW_CONTROL","offset":512,"access":"RW","reset":0,"description":"bypass/channel/format shadow controls"},
+    {"name":"CONFIG_EXPECTED_REVISION","offset":516,"access":"RW","reset":0,"description":"compare-and-commit expected revision"},
+    {"name":"CONFIG_ACTIVE_REVISION","offset":520,"access":"RO","reset":0,"description":"active digital configuration revision"},
+    {"name":"CALIBRATION_ACTIVE_REVISION","offset":524,"access":"RO","reset":0,"description":"active coefficient revision"},
+    {"name":"CONFIG_ACTIVATE_LO","offset":528,"access":"RW","reset":4294967295,"description":"requested activation timestamp low"},
+    {"name":"CONFIG_ACTIVATE_HI","offset":532,"access":"RW","reset":4294967295,"description":"requested activation timestamp high"},
+    {"name":"CONFIG_COMMIT","offset":536,"access":"WO","reset":0,"description":"bit zero requests an atomic sample-boundary commit"},
+    {"name":"CONFIG_STATUS","offset":540,"access":"RO","reset":0,"description":"pending/success/conflict/error state"},
+
+    {"name":"STREAM0_CONTROL","offset":768,"access":"RW","reset":0,"description":"stream disabled after reset"},
+    {"name":"STREAM0_STATUS","offset":772,"access":"RO","reset":0,"description":"running, stalled, overflow state"},
+    {"name":"STREAM0_FORMAT","offset":776,"access":"RW","reset":0,"description":"packet type, sample format, channel mask"},
+    {"name":"STREAM0_PACKET_SAMPLES","offset":780,"access":"RW","reset":0,"description":"complex periods per packet"},
+    {"name":"STREAM0_SEQUENCE_LO","offset":784,"access":"RO","reset":0,"description":"packet sequence low"},
+    {"name":"STREAM0_SEQUENCE_HI","offset":788,"access":"RO","reset":0,"description":"packet sequence high"},
+    {"name":"STREAM0_DROPPED_LO","offset":792,"access":"RO","reset":0,"description":"dropped input samples low"},
+    {"name":"STREAM0_DROPPED_HI","offset":796,"access":"RO","reset":0,"description":"dropped input samples high"},
+    {"name":"STREAM0_ID","offset":800,"access":"RW","reset":0,"description":"nonzero logical stream identifier required before enable"},
+
+    {"name":"DMA_FIFO_HIGH_WATER","offset":1024,"access":"RO","reset":0,"description":"maximum FIFO occupancy"},
+    {"name":"DMA_FIFO_OVERFLOWS","offset":1028,"access":"RO","reset":0,"description":"FIFO overflow count"},
+    {"name":"DMA_DESCRIPTOR_STARVATIONS","offset":1032,"access":"RO","reset":0,"description":"descriptor starvation count"},
+    {"name":"DMA_COMPLETED_BLOCKS_LO","offset":1036,"access":"RO","reset":0,"description":"completed blocks low"},
+    {"name":"DMA_COMPLETED_BLOCKS_HI","offset":1040,"access":"RO","reset":0,"description":"completed blocks high"},
+    {"name":"DMA_COUNTER_RESET","offset":1044,"access":"WO","reset":0,"description":"explicit diagnostic counter reset"},
+
+    {"name":"COEFFICIENT_ADDRESS","offset":1280,"access":"RW","reset":0,"description":"inactive-bank coefficient address"},
+    {"name":"COEFFICIENT_I","offset":1284,"access":"RW","reset":0,"description":"signed coefficient I"},
+    {"name":"COEFFICIENT_Q","offset":1288,"access":"RW","reset":0,"description":"signed coefficient Q"},
+    {"name":"COEFFICIENT_WRITE","offset":1292,"access":"WO","reset":0,"description":"write inactive bank"},
+    {"name":"COEFFICIENT_COMMIT","offset":1296,"access":"WO","reset":0,"description":"swap bank at block boundary"},
+    {"name":"COEFFICIENT_STATUS","offset":1300,"access":"RO","reset":0,"description":"bank, pending, and load error"},
+
+    {"name":"TRIGGER_CONTROL","offset":1536,"access":"RW","reset":0,"description":"trigger capture disarmed after reset"},
+    {"name":"TRIGGER_RING_SAMPLES","offset":1540,"access":"RW","reset":0,"description":"DDR circular-ring capacity"},
+    {"name":"TRIGGER_PRE_SAMPLES","offset":1544,"access":"RW","reset":0,"description":"pretrigger sample periods"},
+    {"name":"TRIGGER_POST_SAMPLES","offset":1548,"access":"RW","reset":0,"description":"posttrigger sample periods"},
+    {"name":"TRIGGER_TIMESTAMP_LO","offset":1552,"access":"RO","reset":0,"description":"latched trigger timestamp low"},
+    {"name":"TRIGGER_TIMESTAMP_HI","offset":1556,"access":"RO","reset":0,"description":"latched trigger timestamp high"},
+    {"name":"TRIGGER_STATUS","offset":1560,"access":"RO","reset":0,"description":"armed, active, complete, error"},
+
+    {"name":"DETECTOR_CONTROL","offset":1792,"access":"RW","reset":0,"description":"all detectors disabled after reset"},
+    {"name":"DETECTOR_THRESHOLD","offset":1796,"access":"RW","reset":0,"description":"magnitude/energy threshold"},
+    {"name":"DETECTOR_HOLDOFF","offset":1800,"access":"RW","reset":0,"description":"holdoff sample periods"},
+    {"name":"DETECTOR_EVENTS_LO","offset":1804,"access":"RO","reset":0,"description":"event count low"},
+    {"name":"DETECTOR_EVENTS_HI","offset":1808,"access":"RO","reset":0,"description":"event count high"},
+
+    {"name":"TX_SAFETY_STATUS","offset":2048,"access":"RO","reset":1,"description":"reset-disarmed safety status"},
+    {"name":"TX_PERSISTENT_INHIBIT","offset":2052,"access":"RW","reset":1,"description":"one means TX cannot arm"},
+    {"name":"TX_ARM_CHALLENGE","offset":2056,"access":"RO","reset":0,"description":"PS transaction challenge"},
+    {"name":"TX_ARM_RESPONSE","offset":2060,"access":"WO","reset":0,"description":"authenticated PS arm response"},
+    {"name":"TX_DISARM","offset":2064,"access":"WO","reset":0,"description":"any nonzero write disarms TX"},
+    {"name":"TX_DISARM_REVISION","offset":2068,"access":"RO","reset":1,"description":"increments for every armed-to-disarmed transition"}
+  ],
+  "capability_bits": {
+    "DUAL_RX": 0,
+    "RAW_BYPASS": 1,
+    "S8": 2,
+    "S8BF": 3,
+    "RESAMPLER_55M": 4,
+    "DDC": 5,
+    "FFT": 6,
+    "STFT": 7,
+    "DETECTORS": 8,
+    "TRIGGER_CAPTURE": 9,
+    "CROSS_CHANNEL": 10,
+    "DMA_SLOT_HEADER_V1": 11,
+    "CALIBRATED_IQ": 12,
+    "TX_PATH": 16
+  },
+  "register_fields": {
+    "GLOBAL_STATUS": {
+      "RX_PLL_LOCKED": {"lsb": 0, "width": 1},
+      "AD9361_INTERFACE_READY": {"lsb": 1, "width": 1},
+      "STREAM0_RUNNING": {"lsb": 2, "width": 1},
+      "FAULT_ACTIVE": {"lsb": 31, "width": 1}
+    },
+    "GLOBAL_FAULTS": {
+      "FIFO_OVERFLOW": {"lsb": 0, "width": 1},
+      "DMA_OVERRUN": {"lsb": 1, "width": 1},
+      "INTERFACE_ERROR": {"lsb": 2, "width": 1}
+    },
+    "SAMPLE_COMMAND": {
+      "APPLY_COUNTER_SET": {"lsb": 0, "width": 1}
+    },
+    "CONFIG_SHADOW_CONTROL": {
+      "RAW_BYPASS": {"lsb": 0, "width": 1},
+      "DC_BYPASS": {"lsb": 1, "width": 1},
+      "IQ_BYPASS": {"lsb": 2, "width": 1},
+      "EQ_BYPASS": {"lsb": 3, "width": 1},
+      "NORMALIZER_BYPASS": {"lsb": 4, "width": 1},
+      "CHANNEL_MASK": {"lsb": 8, "width": 2},
+      "SAMPLE_FORMAT": {"lsb": 16, "width": 8}
+    },
+    "CONFIG_COMMIT": {
+      "APPLY": {"lsb": 0, "width": 1}
+    },
+    "CONFIG_STATUS": {
+      "PENDING": {"lsb": 0, "width": 1},
+      "SUCCESS": {"lsb": 1, "width": 1},
+      "REVISION_CONFLICT": {"lsb": 2, "width": 1},
+      "ERROR": {"lsb": 3, "width": 1}
+    },
+    "STREAM0_CONTROL": {
+      "ENABLE": {"lsb": 0, "width": 1}
+    },
+    "STREAM0_STATUS": {
+      "RUNNING": {"lsb": 0, "width": 1},
+      "OVERFLOW": {"lsb": 1, "width": 1},
+      "INTERFACE_ERROR": {"lsb": 2, "width": 1},
+      "DMA_ERROR": {"lsb": 3, "width": 1}
+    },
+    "STREAM0_FORMAT": {
+      "PACKET_TYPE": {"lsb": 0, "width": 8},
+      "SAMPLE_FORMAT": {"lsb": 8, "width": 8},
+      "CHANNEL_MASK": {"lsb": 16, "width": 8}
+    },
+    "DMA_COUNTER_RESET": {
+      "APPLY": {"lsb": 0, "width": 1}
+    },
+    "COEFFICIENT_WRITE": {
+      "APPLY": {"lsb": 0, "width": 1}
+    },
+    "COEFFICIENT_COMMIT": {
+      "APPLY": {"lsb": 0, "width": 1}
+    },
+    "TRIGGER_CONTROL": {
+      "ARM": {"lsb": 0, "width": 1},
+      "SOFTWARE_TRIGGER": {"lsb": 1, "width": 1}
+    },
+    "DETECTOR_CONTROL": {
+      "PEAK_ENABLE": {"lsb": 0, "width": 1},
+      "ENERGY_ENABLE": {"lsb": 1, "width": 1},
+      "CLIPPING_ENABLE": {"lsb": 2, "width": 1}
+    },
+    "TX_SAFETY_STATUS": {
+      "DISARMED": {"lsb": 0, "width": 1},
+      "PERSISTENT_INHIBIT": {"lsb": 1, "width": 1},
+      "FAULT_INHIBIT": {"lsb": 2, "width": 1}
+    },
+    "TX_DISARM": {
+      "APPLY": {"lsb": 0, "width": 1}
+    }
+  }
+}

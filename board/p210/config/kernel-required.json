@@ -1,0 +1,22 @@
+{
+  "schema": "neptunesdr.board-kernel-policy/v1",
+  "required_builtin": [
+    "CONFIG_AD9361",
+    "CONFIG_AXI_DMAC",
+    "CONFIG_IIO",
+    "CONFIG_IIO_BUFFER_DMA",
+    "CONFIG_MACB",
+    "CONFIG_MMC",
+    "CONFIG_MMC_SDHCI_OF_ARASAN",
+    "CONFIG_USB_CHIPIDEA",
+    "CONFIG_USB_CONFIGFS",
+    "CONFIG_USB_CONFIGFS_ACM",
+    "CONFIG_USB_CONFIGFS_F_FS"
+  ],
+  "required_runtime_assertions": [
+    "the selected USB controller is physically validated in peripheral mode",
+    "all QSPI MTD partitions exposed to Linux are read-only",
+    "the PL DMA driver owns DMA-safe allocation and cache synchronization",
+    "TX enable resets low and is disabled on driver or daemon failure"
+  ]
+}

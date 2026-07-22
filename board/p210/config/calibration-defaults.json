@@ -1,0 +1,22 @@
+{
+  "schema": "neptunesdr.calibration-defaults/v1",
+  "revision": 0,
+  "classification": "uncalibrated identity defaults",
+  "device_serial": null,
+  "raw_bypass": true,
+  "corrections": {
+    "dc_offset": {
+      "enabled": false
+    },
+    "iq_imbalance": {
+      "enabled": false
+    },
+    "channel_alignment": {
+      "enabled": false
+    },
+    "frequency_response_equalization": {
+      "enabled": false
+    }
+  },
+  "measurement_claims": []
+}

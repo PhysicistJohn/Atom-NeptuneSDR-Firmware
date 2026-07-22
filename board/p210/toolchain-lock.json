@@ -1,0 +1,39 @@
+{
+  "schema": "neptunesdr.board-toolchain-lock/v1",
+  "platform_id": "p210-xc7z020-custom-v0",
+  "classification": "required tool identities; proprietary tools are user-supplied and never downloaded by this repository",
+  "tools": {
+    "vivado": {
+      "status": "locked",
+      "command": "vivado",
+      "version_args": [
+        "-version"
+      ],
+      "version_regex": "Vivado v2023\\.2"
+    },
+    "xsct": {
+      "status": "locked",
+      "command": "xsct",
+      "version_args": [
+        "-version"
+      ],
+      "version_regex": "2023\\.2"
+    },
+    "bootgen": {
+      "status": "locked",
+      "command": "bootgen",
+      "version_args": [
+        "-version"
+      ],
+      "version_regex": "2023\\.2"
+    },
+    "arm_cross_compiler": {
+      "status": "unresolved",
+      "reason": "The Linux/U-Boot/FSBL source selections must determine one exact ARM hard-float toolchain artifact."
+    },
+    "rootfs_generator": {
+      "status": "unresolved",
+      "reason": "Buildroot or another minimal-rootfs generator and its exact revision have not been selected."
+    }
+  }
+}

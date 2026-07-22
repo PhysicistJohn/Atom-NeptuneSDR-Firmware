@@ -1,0 +1,173 @@
+{
+  "control_spec_sha256": "730622eefad05bb2b4937b6c1b30d71b48d0be1d3c838b8c37bd6aa243ae839e",
+  "data_spec_sha256": "78a56d6567a95b2cb5fe471803d9cfe287ade65b38c404b60a8910b6fcf7cb7c",
+  "generator": "scripts/generate_protocol.py",
+  "schema": "neptunesdr.edge.golden-vectors/v1",
+  "vectors": [
+    {
+      "bytes": 256,
+      "description": "Dual-RX S8BF packet with exact resampler state, measurement metadata, and payload CRC.",
+      "expected": {
+        "calibration_revision": 3,
+        "channel_mask": 3,
+        "configuration_revision": 7,
+        "packet_type": "NORMALIZED_IQ",
+        "resampler_phase_numerator": 123,
+        "sample_count": 4,
+        "sample_format": "S8BF",
+        "sample_timestamp": 305419896,
+        "sequence_number": 72623859790382856,
+        "stream_id": 16909060
+      },
+      "kind": "data",
+      "name": "normalized_s8bf_dual_rx_55msps",
+      "sha256": "33d356a69d91b9195e40b712ff12f8d9039cfd00ebdab316c6eeff24f52b5ea7",
+      "wire_hex": "4e454450013c03048001000004030201080706050403020178563412000000000400000003000500100000000700000003000000000000000b0000005117584401000c00000000008008089200000000c03b470380f0fa02307500003c730000000001008da40000000003030000000002000a00000000000401010101000000100000000020320000007f0001000000080000000000000003000a00000000000080a903c03b47035f0500067b005f057856341200000000bc0a00000000000006000800000000000020320000007f0001000000080000000000000000000000ff00040000000000e50769ec000000007f80fe020102fefd1020f0e055aaab54"
+    },
+    {
+      "bytes": 112,
+      "description": "Payload-free state change activated on an exact ingress sample tick.",
+      "expected": {
+        "activation_timestamp": 305481336,
+        "new_configuration_revision": 8,
+        "packet_type": "STATE_CHANGE",
+        "previous_configuration_revision": 7
+      },
+      "kind": "data",
+      "name": "configuration_state_change",
+      "sha256": "68cd1d960863b29dd9bcc47471fd01bb3f856bb027bf57b8d5ec191785b3f807",
+      "wire_hex": "4e454450011c0900c000000000000000090000000000000078463512000000000000000003000100000000000800000003000000000000000c00000059592b1e05000c000000000001000300000000000900000000000000070000000800000003000000030000007846351200000000"
+    },
+    {
+      "bytes": 96,
+      "description": "Observable DMA overrun with unknown loss count and a new continuity epoch.",
+      "expected": {
+        "discontinuity_revision": 1,
+        "lost_input_samples": 4294967295,
+        "packet_type": "DISCONTINUITY",
+        "reason": "DMA_OVERRUN"
+      },
+      "kind": "data",
+      "name": "dma_overrun_discontinuity",
+      "sha256": "4a36652a7df39ad19530438112bfeecfa77064b08ac86205fe7516be0f426229",
+      "wire_hex": "4e45445001180a00a1000000040302010a0000000000000078563512000000000000000003000100000000000800000003000000010000000c000000102a5955040008000000000003000200ffffffffdc463512000000007856351200000000"
+    },
+    {
+      "bytes": 120,
+      "description": "Atomic USB SET_RF request pinned to expected revisions and an activation tick.",
+      "expected": {
+        "activation_timestamp": 305481336,
+        "command": "SET_RF",
+        "configuration_revision": 7,
+        "message_kind": "REQUEST",
+        "transaction_id": 2712847316
+      },
+      "kind": "control",
+      "name": "atomic_set_rf_request",
+      "sha256": "00acb4b1631fe043d7528325dfec98e38ed25d49bcd9b07aece861ad9004c79f",
+      "wire_hex": "4e454350010a010700010000d4c3b2a150000000070000007846351200000000fd39df59d8629fdb01000c000100000080080892000000000080a903c03b470380f0fa02307500003c7300000300000007000000000000000200080001000000070000000300000078463512000000000900000000000000"
+    },
+    {
+      "bytes": 80,
+      "description": "Successful SET_RF response carrying the accepted revision transition.",
+      "expected": {
+        "activation_timestamp": 305481336,
+        "command": "SET_RF",
+        "configuration_revision": 8,
+        "message_kind": "RESPONSE",
+        "transaction_id": 2712847316
+      },
+      "kind": "control",
+      "name": "atomic_set_rf_response",
+      "sha256": "196133de79f8f80b71d05d3954936c07ce6b956dbc42c60eda59e97a0bb7f5ce",
+      "wire_hex": "4e454350010a020400010000d4c3b2a1280000000800000078463512000000006030b9263165b74b04000a00000000000700000008000000030000000300000078463512000000000900000000000000"
+    },
+    {
+      "bytes": 16,
+      "description": "Native signed 12-bit ADC codes sign-extended in S16 I/Q containers.",
+      "expected": {
+        "sample_format": "S16",
+        "samples": [
+          [
+            -2048,
+            2047
+          ],
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            -1
+          ],
+          [
+            1024,
+            -1024
+          ]
+        ]
+      },
+      "kind": "iq-payload",
+      "name": "iq_payload_s16",
+      "sha256": "9e2fb30bccefbf2945cf83f90c2fa5f1a97afb7f4019085e7a7703b5ee4ae050",
+      "wire_hex": "00f8ff07ffff00000100ffff000400fc"
+    },
+    {
+      "bytes": 12,
+      "description": "The same native ADC codes losslessly packed into three bytes per complex sample.",
+      "expected": {
+        "sample_format": "S12P",
+        "samples": [
+          [
+            -2048,
+            2047
+          ],
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            -1
+          ],
+          [
+            1024,
+            -1024
+          ]
+        ]
+      },
+      "kind": "iq-payload",
+      "name": "iq_payload_s12p",
+      "sha256": "8ff0f6f4ed5201200ca92a9792032888ef16cd17cc6c6c6403ba6339238db9ca",
+      "wire_hex": "00f87fff0f0001f0ff0004c0"
+    },
+    {
+      "bytes": 8,
+      "description": "Signed int8 I/Q payload after deterministic rounding and saturation.",
+      "expected": {
+        "sample_format": "S8",
+        "samples": [
+          [
+            -128,
+            127
+          ],
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            -1
+          ],
+          [
+            64,
+            -64
+          ]
+        ]
+      },
+      "kind": "iq-payload",
+      "name": "iq_payload_s8",
+      "sha256": "6c467ec146eac5d1074bd5798a5d42dbe9b265a5074c1de52a4178c2a551e5b0",
+      "wire_hex": "807fff0001ff40c0"
+    }
+  ]
+}

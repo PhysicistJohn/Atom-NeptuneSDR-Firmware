@@ -1,0 +1,144 @@
+{
+  "schema": "neptunesdr.p210-hardware-manifest/v1",
+  "profile": "hardware-evidence",
+  "flashable": false,
+  "candidate_id": "community-p210-mixed-evidence",
+  "description": "Observed contacts from the locked community SD handoff, separately locked XSA, and public DTB; this candidate is intentionally inconsistent and is not a board build.",
+  "requirements": {
+    "required_artifacts": [
+      "sd-boot-hdf",
+      "system-xsa",
+      "public-devicetree"
+    ],
+    "minimum_evidence": {
+      "part": 2,
+      "ddr.bus_width_bits": 2,
+      "ddr.size_bytes": 2,
+      "radio.digital_interface": 2,
+      "radio.rx_channels": 2,
+      "radio.tx_channels": 2,
+      "gpio.mio_count": 2,
+      "gpio.emio_width": 2,
+      "build.vivado_version": 2,
+      "build.source_identity": 2
+    },
+    "required_gpio_controls": [
+      "ad9361_en_agc",
+      "ad9361_sync",
+      "ad9361_reset",
+      "ad9361_enable",
+      "ad9361_txnrx",
+      "usb0_reset"
+    ]
+  },
+  "artifacts": [
+    {
+      "id": "sd-boot-hdf",
+      "role": "boot-handoff",
+      "source": {
+        "lock_artifact": "p210-sd-boot",
+        "sha256": "9e548d41388df773baa42be70d6c0c56eebb41e7e4c6225db641a0ddc3aba52b",
+        "member": "bootgen_sysfiles.tgz!system_top.hdf",
+        "evidence": "Observed in the locked SD archive; generated HWH and bitstream identify Vivado 2019.1."
+      },
+      "contacts": {
+        "part": "xc7z020clg400-1",
+        "ddr": {
+          "bus_width_bits": 32,
+          "size_bytes": 1073741824
+        },
+        "radio": {
+          "digital_interface": "lvds",
+          "rx_channels": 1,
+          "tx_channels": 1
+        },
+        "gpio": {
+          "mio_count": 54,
+          "emio_width": 64,
+          "control_offsets": {}
+        },
+        "build": {
+          "vivado_version": "2019.1",
+          "source_identity": {
+            "repository": "https://github.com/analogdevicesinc/hdl",
+            "revision": "2019_r2",
+            "path": "projects/adrv9364z7020/ccbob_lvds"
+          }
+        }
+      }
+    },
+    {
+      "id": "system-xsa",
+      "role": "fpga-handoff",
+      "source": {
+        "lock_artifact": "p210-system-xsa",
+        "sha256": "caecfeb3ce96f3c6951311ed985af4f144b5a8e54a3cbc25f0527b02c4ff1066",
+        "member": "system_top.xsa",
+        "evidence": "Observed in the separately locked XSA; generated metadata identifies Vivado 2023.2."
+      },
+      "contacts": {
+        "part": "xc7z020clg400-1",
+        "ddr": {
+          "bus_width_bits": 16,
+          "size_bytes": 536870912
+        },
+        "radio": {
+          "digital_interface": "cmos",
+          "rx_channels": 2,
+          "tx_channels": 2
+        },
+        "gpio": {
+          "mio_count": 54,
+          "emio_width": 18,
+          "control_offsets": {}
+        },
+        "build": {
+          "vivado_version": "2023.2",
+          "source_identity": {
+            "repository": "https://github.com/analogdevicesinc/hdl",
+            "revision": "065c8f186ef87ff049d279ed5859ee8d97d91808",
+            "path": "projects/pluto with Neptune-SDR-nix-utils@ba4a958333a3dfec5e5102e30fe017508e1fd6f6 adaptation"
+          }
+        }
+      }
+    },
+    {
+      "id": "public-devicetree",
+      "role": "devicetree",
+      "source": {
+        "lock_artifact": "p210-sd-boot",
+        "sha256": "9e548d41388df773baa42be70d6c0c56eebb41e7e4c6225db641a0ddc3aba52b",
+        "member": "devicetree.dtb",
+        "evidence": "Observed in the locked SD archive; the DTB declares LVDS, 2Rx/2Tx, 512 MiB, and absolute PS GPIO offsets."
+      },
+      "contacts": {
+        "part": null,
+        "ddr": {
+          "bus_width_bits": null,
+          "size_bytes": 536870912
+        },
+        "radio": {
+          "digital_interface": "lvds",
+          "rx_channels": 2,
+          "tx_channels": 2
+        },
+        "gpio": {
+          "mio_count": 54,
+          "emio_width": null,
+          "control_offsets": {
+            "ad9361_en_agc": 98,
+            "ad9361_sync": 99,
+            "ad9361_reset": 100,
+            "ad9361_enable": 101,
+            "ad9361_txnrx": 102,
+            "usb0_reset": 85
+          }
+        },
+        "build": {
+          "vivado_version": null,
+          "source_identity": null
+        }
+      }
+    }
+  ]
+}

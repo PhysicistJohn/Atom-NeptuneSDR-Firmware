@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+config NEPTUNE_STREAM
+	tristate "Neptune SDR PL DMA stream"
+	depends on OF && HAS_DMA && DMA_ENGINE
+	depends on ARCH_ZYNQ || COMPILE_TEST
+	help
+	  Own a DMA-coherent PL-to-PS receive ring for the Neptune SDR edge
+	  data path using a DT-provided DMAEngine channel.  A single consumer
+	  uses poll, fixed-width ioctls, and a read-only mmap to acquire and
+	  release generation-tagged slots.  A separate nonexclusive read-only
+	  status node exposes canonical PL health without mapping MMIO.
+
+	  This driver does not use Linux IIO userspace reads for payloads.  It
+	  binds only to a matching v1 PL register contract and fails probe for
+	  unknown hardware, unsupported DMA mmap, or incomplete DT resources.
+
+	  The source is deliberately limited to Linux 5.10 through 6.12.  The
+	  repository's pinned Linux 4.14 development image is not supported.

@@ -1,0 +1,96 @@
+{
+  "schema": "neptunesdr.board-profile/v1",
+  "profile": "p210-sd-development-v0",
+  "platform_id": "p210-xc7z020-custom-v0",
+  "execution_target": "physical-board",
+  "physical_validation": "required",
+  "flashable": false,
+  "installation": {
+    "medium": "removable-sd",
+    "host_writer_included": false,
+    "qspi_write_allowed": false
+  },
+  "safety": {
+    "tx_enabled_at_boot": false,
+    "tx_requires_explicit_runtime_enable": true,
+    "qspi_write_allowed": false,
+    "raw_bypass_required": true
+  },
+  "outputs": [
+    {
+      "id": "fsbl",
+      "path": "boot/fsbl.elf",
+      "role": "FSBL built from the matched hardware export"
+    },
+    {
+      "id": "bitstream",
+      "path": "boot/system_top.bit",
+      "role": "P210 programmable-logic bitstream"
+    },
+    {
+      "id": "uboot",
+      "path": "boot/u-boot.elf",
+      "role": "SD-only U-Boot executable"
+    },
+    {
+      "id": "boot_bin",
+      "path": "boot/BOOT.BIN",
+      "role": "BootROM container containing the matched FSBL, bitstream, and U-Boot"
+    },
+    {
+      "id": "kernel",
+      "path": "boot/zImage",
+      "role": "P210 Linux kernel"
+    },
+    {
+      "id": "devicetree",
+      "path": "boot/p210.dtb",
+      "role": "P210 device tree with SD-only boot and validated peripheral roles"
+    },
+    {
+      "id": "rootfs",
+      "path": "rootfs/rootfs.ext4",
+      "role": "Minimal deterministic root filesystem"
+    },
+    {
+      "id": "control_daemon",
+      "path": "rootfs-artifacts/usr/sbin/neptune-control",
+      "role": "Structured USB control and health daemon"
+    },
+    {
+      "id": "calibration_defaults",
+      "path": "rootfs-artifacts/usr/share/neptune/calibration-defaults.json",
+      "role": "Explicit uncalibrated raw-bypass defaults"
+    },
+    {
+      "id": "protocol_schema",
+      "path": "rootfs-artifacts/usr/share/neptune/protocol-schema.json",
+      "role": "Exact wire-protocol schema used to build device bindings"
+    },
+    {
+      "id": "timing_synthesis",
+      "path": "reports/timing-synthesis.rpt",
+      "role": "Post-synthesis timing report"
+    },
+    {
+      "id": "timing_implementation",
+      "path": "reports/timing-implementation.rpt",
+      "role": "Post-route timing report"
+    },
+    {
+      "id": "utilization_report",
+      "path": "reports/utilization.rpt",
+      "role": "Post-route FPGA resource utilization report"
+    },
+    {
+      "id": "cdc_report",
+      "path": "reports/cdc.rpt",
+      "role": "Clock-domain crossing analysis report"
+    },
+    {
+      "id": "sd_image",
+      "path": "images/neptune-p210-sd.img",
+      "role": "Removable-SD development image; not a QSPI image"
+    }
+  ]
+}

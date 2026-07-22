@@ -1,0 +1,48 @@
+{
+  "schema": "neptunesdr.board-source-lock/v1",
+  "profile": "p210-sd-development-v0",
+  "platform_id": "p210-xc7z020-custom-v0",
+  "classification": "build scaffold; unresolved inputs are deliberate blockers, not inferred vendor sources",
+  "sources": {
+    "hardware": {
+      "status": "unresolved",
+      "platform_id": "p210-xc7z020-custom-v0",
+      "reason": "Portable Neptune Edge RTL is present, but a revision-matched ADI board top level, constraints, generated Xilinx IP, and routed timing baseline have not been established."
+    },
+    "fsbl": {
+      "status": "unresolved",
+      "platform_id": "p210-xc7z020-custom-v0",
+      "reason": "FSBL source and BSP must be generated from the same resolved hardware export as the bitstream."
+    },
+    "uboot": {
+      "status": "unresolved",
+      "platform_id": "p210-xc7z020-custom-v0",
+      "reason": "A P210-specific U-Boot source commit, defconfig, and SD-only environment have not been validated on hardware."
+    },
+    "linux": {
+      "status": "unresolved",
+      "platform_id": "p210-xc7z020-custom-v0",
+      "reason": "A Linux source commit and P210 device-tree source matched to the selected AD9361 HDL have not been validated."
+    },
+    "rootfs": {
+      "status": "unresolved",
+      "platform_id": "p210-xc7z020-custom-v0",
+      "reason": "A minimal rootfs generator, configuration, and cross-toolchain have not been selected and locked."
+    },
+    "control_daemon": {
+      "status": "unresolved",
+      "platform_id": "p210-xc7z020-custom-v0",
+      "reason": "The USB control and UDP data services are source-tested, but their clean source identity, ARM build inputs, target service configuration, and runtime device contacts are not yet locked."
+    },
+    "calibration": {
+      "status": "unresolved",
+      "platform_id": "p210-xc7z020-custom-v0",
+      "reason": "Integrity-checked revision storage and explicit uncalibrated bypass defaults exist; no serial-bound, device-measured calibration is available."
+    },
+    "protocol": {
+      "status": "unresolved",
+      "platform_id": "p210-xc7z020-custom-v0",
+      "reason": "Canonical Edge v1 schemas, bindings, registers, and golden vectors exist, but their final clean-commit identity and physical-image install stage are not yet locked."
+    }
+  }
+}

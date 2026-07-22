@@ -1,0 +1,57 @@
+# Reproducible x86-64 batch worker for Vivado ML Standard 2023.2.
+# On Apple Silicon this uses QEMU system emulation and is intentionally
+# headless. The same repository build contract also runs on native x86-64.
+vmType: qemu
+arch: x86_64
+plain: true
+cpus: 8
+memory: 16GiB
+disk: 180GiB
+
+images:
+  - location: https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-amd64.img
+    arch: x86_64
+    digest: sha256:ec3cdc1bf496078f645ccc8ac823e17609658753477ebc4e5fb730729ac5b434
+
+containerd:
+  system: false
+  user: false
+
+mounts: []
+
+provision:
+  - mode: system
+    script: |
+      #!/usr/bin/env bash
+      set -euxo pipefail
+      export DEBIAN_FRONTEND=noninteractive
+      apt-get update
+      apt-get install -y --no-install-recommends \
+        build-essential \
+        ca-certificates \
+        curl \
+        git \
+        libfontconfig1 \
+        libfreetype6 \
+        libglib2.0-0 \
+        libncurses5 \
+        libtinfo5 \
+        libx11-6 \
+        libxext6 \
+        libxi6 \
+        libxrender1 \
+        libxtst6 \
+        linux-headers-generic \
+        make \
+        python3 \
+        python3-venv \
+        rsync \
+        tcl \
+        unzip \
+        xz-utils \
+        zip
+      install -d -m 0755 /opt/amd /opt/neptune-build /opt/neptune-tool-cache
+      printf '%s\n' 'vivado-worker-schema=neptune.vivado-worker/v1' > /etc/neptune-vivado-worker
+      printf '%s\n' 'ubuntu=22.04' >> /etc/neptune-vivado-worker
+      printf '%s\n' 'architecture=x86_64' >> /etc/neptune-vivado-worker
+      printf '%s\n' 'vivado-required=2023.2' >> /etc/neptune-vivado-worker

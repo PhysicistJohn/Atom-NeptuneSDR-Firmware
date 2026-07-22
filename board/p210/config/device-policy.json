@@ -1,0 +1,27 @@
+{
+  "schema": "neptunesdr.board-device-policy/v1",
+  "profile": "p210-sd-development-v0",
+  "boot_media": [
+    "removable-sd"
+  ],
+  "qspi": {
+    "probe_read_only": true,
+    "userspace_write_tools_allowed": false,
+    "update_allowed": false
+  },
+  "transmit": {
+    "enabled_at_boot": false,
+    "enable_requires_explicit_control_transaction": true,
+    "persistent_inhibit_required": true,
+    "fault_or_daemon_exit_disables_tx": true
+  },
+  "control": {
+    "primary_transport": "usb",
+    "ethernet_dependency_allowed": false
+  },
+  "data": {
+    "primary_transport": "gigabit-ethernet-udp",
+    "silent_sample_drop_allowed": false,
+    "raw_bypass_required": true
+  }
+}

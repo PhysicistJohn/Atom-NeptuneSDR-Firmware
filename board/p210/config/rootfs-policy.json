@@ -1,0 +1,26 @@
+{
+  "schema": "neptunesdr.board-rootfs-policy/v1",
+  "required_services": [
+    "neptune-control",
+    "neptune-health",
+    "watchdog"
+  ],
+  "disabled_by_default": [
+    "dropbear",
+    "httpd",
+    "iiod-tcp",
+    "mass-storage-updater"
+  ],
+  "forbidden_executables": [
+    "dd",
+    "dfu-util",
+    "flashcp",
+    "fw_setenv",
+    "mtd_debug",
+    "nandwrite",
+    "ubiformat"
+  ],
+  "persistent_writable_locations": [
+    "/var/lib/neptune"
+  ]
+}

@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import unittest
 
+from neptunesdr_firmwave.board_build import FORBIDDEN_EXECUTABLES
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -34,14 +36,21 @@ class SourceBoundaryTests(unittest.TestCase):
         self.assertIn("--fft-streamer", source)
 
     def test_executable_tooling_has_no_flash_write_path(self):
+        # The board orchestrator must name dangerous writers in its fail-closed
+        # deny-list.  Exclude that defensive vocabulary from the text scan so a
+        # guard cannot be mistaken for an invocation path.
+        board_guard = ROOT / "src" / "neptunesdr_firmwave" / "board_build.py"
         payload = "\n".join(
             path.read_text(encoding="utf-8", errors="replace")
             for directory in (ROOT / "src", ROOT / "scripts")
             for path in directory.rglob("*")
-            if path.is_file() and path.suffix in {".py", ".sh"}
+            if path.is_file()
+            and path.suffix in {".py", ".sh"}
+            and path != board_guard
         ).lower()
         for forbidden in ("dfu-util", "flashcp", "mtd_debug write", "dd of=/dev/"):
             self.assertNotIn(forbidden, payload)
+        self.assertTrue({"dd", "dfu-util", "flashcp", "mtd_debug"} <= FORBIDDEN_EXECUTABLES)
 
     def test_interface_and_runtime_locks_are_valid_json_objects(self):
         paths = (

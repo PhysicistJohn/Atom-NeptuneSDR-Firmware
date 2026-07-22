@@ -15,3 +15,11 @@ class InterfaceError(FirmwaveError, ValueError):
 
 class ProvenanceError(FirmwaveError, ValueError):
     """A requested source identity cannot be established from Git."""
+
+
+class BoardBuildError(FirmwaveError, ValueError):
+    """A physical-board build definition or execution failed closed."""
+
+
+class HardwareManifestError(FirmwaveError, ValueError):
+    """A hardware-evidence manifest is missing or structurally invalid."""

@@ -1,0 +1,101 @@
+{
+  "schema": "neptunesdr.board-build-plan/v1",
+  "profile": "p210-sd-development-v0",
+  "platform_id": "p210-xc7z020-custom-v0",
+  "source_date_epoch": 0,
+  "stages": [
+    {
+      "id": "boot-chain",
+      "status": "unresolved",
+      "reason": "Portable RTL and the pinned Vivado worker exist, but a reconciled board top level/export, matched FSBL/U-Boot sources, and direct-argv target build driver do not.",
+      "depends": [],
+      "outputs": [
+        "fsbl",
+        "bitstream",
+        "uboot",
+        "boot_bin"
+      ]
+    },
+    {
+      "id": "linux",
+      "status": "unresolved",
+      "reason": "The locked Linux source, configuration, DTS, and direct argv build driver do not yet exist.",
+      "depends": [
+        "boot-chain"
+      ],
+      "outputs": [
+        "kernel",
+        "devicetree"
+      ]
+    },
+    {
+      "id": "rootfs",
+      "status": "unresolved",
+      "reason": "The locked minimal-rootfs generator and direct argv build driver do not yet exist.",
+      "depends": [
+        "linux"
+      ],
+      "outputs": [
+        "rootfs"
+      ]
+    },
+    {
+      "id": "control-daemon",
+      "status": "unresolved",
+      "reason": "The NECP daemon and UDP data-service sources are host-tested; the ARM toolchain, target FunctionFS/driver integration, service units, and direct-argv image build remain unlocked.",
+      "depends": [],
+      "outputs": [
+        "control_daemon"
+      ]
+    },
+    {
+      "id": "calibration-defaults",
+      "status": "unresolved",
+      "reason": "The identity defaults and validated revision store exist, but the deterministic target installation stage and any serial-bound measured bundle remain unlocked.",
+      "depends": [],
+      "outputs": [
+        "calibration_defaults"
+      ]
+    },
+    {
+      "id": "protocol-schema",
+      "status": "unresolved",
+      "reason": "Edge v1 schemas, generated bindings, register map, and golden vectors pass source tests; a clean-commit artifact lock and target image installation stage remain unresolved.",
+      "depends": [],
+      "outputs": [
+        "protocol_schema"
+      ]
+    },
+    {
+      "id": "hardware-reports",
+      "status": "unresolved",
+      "reason": "Timing, utilization, and CDC reports must come from the same routed design as the emitted bitstream.",
+      "depends": [
+        "boot-chain"
+      ],
+      "outputs": [
+        "timing_synthesis",
+        "timing_implementation",
+        "utilization_report",
+        "cdc_report"
+      ]
+    },
+    {
+      "id": "sd-image",
+      "status": "unresolved",
+      "reason": "The deterministic regular-file SD image assembler has not been implemented or validated.",
+      "depends": [
+        "boot-chain",
+        "linux",
+        "rootfs",
+        "control-daemon",
+        "calibration-defaults",
+        "protocol-schema",
+        "hardware-reports"
+      ],
+      "outputs": [
+        "sd_image"
+      ]
+    }
+  ]
+}

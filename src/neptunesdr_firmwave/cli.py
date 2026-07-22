@@ -9,16 +9,26 @@ import sys
 from typing import List, Optional
 
 from .boot_harness import fetch_locked_to_cache, locked_artifact_path, verify_locked_artifact
+from .calibration import validate_bundle
 from .errors import FirmwaveError
+from .hardware_manifest import validate_hardware_manifest
 from .interface import interface_path, interface_sha256, load_interface
 from .locks import lock_summary, validate_firmware_lock
 from .provenance import source_identity
+from .update_manifest import validate_update_manifest
 from .version import __version__
 from .xsa import validate_xsa
 
 
 def _json(value: object) -> None:
     print(json.dumps(value, indent=2, sort_keys=True))
+
+
+def _load_json_object(path: Path) -> object:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("invalid JSON in %s: %s" % (path, exc)) from exc
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -56,6 +66,33 @@ def build_parser() -> argparse.ArgumentParser:
     xsa.add_argument("--cache-dir", type=Path, default=Path(".cache/firmware"))
     xsa.add_argument("--lock", type=Path)
     xsa.add_argument("--json", action="store_true")
+
+    hardware = commands.add_parser(
+        "validate-hardware-manifest",
+        help="cross-check a non-flashable P210 hardware-evidence candidate",
+    )
+    hardware.add_argument("--manifest", type=Path)
+    hardware.add_argument("--firmware-lock", type=Path)
+    hardware.add_argument("--json", action="store_true")
+
+    calibration = commands.add_parser(
+        "validate-calibration",
+        help="validate an integrity-checked, device-bound calibration bundle",
+    )
+    calibration.add_argument("bundle", type=Path)
+    calibration.add_argument("--device-serial")
+    calibration.add_argument("--json", action="store_true")
+
+    update = commands.add_parser(
+        "validate-update",
+        help="verify a signed, rollback-resistant, SD-only update manifest",
+    )
+    update.add_argument("manifest", type=Path)
+    update.add_argument("--artifact-root", type=Path, required=True)
+    update.add_argument("--public-key", type=Path, required=True)
+    update.add_argument("--accepted-rollback-index", type=int, required=True)
+    update.add_argument("--openssl", default="openssl")
+    update.add_argument("--json", action="store_true")
     return parser
 
 
@@ -123,6 +160,46 @@ def main(argv: Optional[List[str]] = None) -> int:
             else:
                 print("P210 XSA: %s" % ("PASS" if report.compatible else "FAIL"))
             return 0 if report.compatible else 1
+        if args.command == "validate-hardware-manifest":
+            report = validate_hardware_manifest(args.manifest, args.firmware_lock)
+            if args.json:
+                _json(report.to_dict())
+            else:
+                print(
+                    "P210 hardware evidence: %s (%d issue(s))"
+                    % ("PASS" if report.compatible else "FAIL", len(report.issues))
+                )
+                print("candidate=%s" % report.candidate_id)
+                print("source=%s" % report.source)
+            return 0 if report.compatible else 1
+        if args.command == "validate-calibration":
+            value = validate_bundle(
+                _load_json_object(args.bundle), expected_serial=args.device_serial
+            )
+            if args.json:
+                _json(value)
+            else:
+                print("Calibration bundle: PASS")
+                print("device_serial=%s" % value["device_serial"])
+                print("revision=%d" % value["revision"])
+                print("tables=%d" % len(value["tables"]))
+            return 0
+        if args.command == "validate-update":
+            value = validate_update_manifest(
+                _load_json_object(args.manifest),
+                args.artifact_root,
+                public_key=args.public_key,
+                accepted_rollback_index=args.accepted_rollback_index,
+                openssl=args.openssl,
+            )
+            if args.json:
+                _json(value)
+            else:
+                print("Signed SD update: PASS")
+                print("platform_id=%s" % value["platform_id"])
+                print("target_slot=%s" % value["target_slot"])
+                print("rollback_index=%d" % value["rollback_index"])
+            return 0
     except (FirmwaveError, OSError, ValueError, KeyError) as exc:
         print("error: %s" % exc, file=sys.stderr)
         return 2

@@ -95,3 +95,13 @@ There is deliberately no flash command. Do not write these derived artifacts
 to hardware. Preserve the factory media and obtain a revision-matched recovery
 image and vendor procedure first. Source in this repository is MIT licensed;
 downloaded inputs retain their upstream licenses. See `NOTICE.md`.
+
+## Operator golden arithmetic
+
+The v2 operator's fixed-point datapath is pinned by
+[`specs/golden-arithmetic-v1.md`](specs/golden-arithmetic-v1.md) -- one integer
+arithmetic (committed 18-bit twiddle ROM, round-half-to-even everywhere)
+reproduced bit-for-bit by the Python reference (Atom-Neural-RL), the C twin core,
+the RTL, and the QEMU operator device. See
+[`Atom-NeptuneSDR-Twin/cosim/REPRODUCE.md`](https://github.com/PhysicistJohn/Atom-NeptuneSDR-Twin/blob/main/cosim/REPRODUCE.md)
+to run every leg.

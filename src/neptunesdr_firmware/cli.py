@@ -1,4 +1,4 @@
-"""Command-line entry point for Firmwave artifact and interface tooling."""
+"""Command-line entry point for Firmware artifact and interface tooling."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ import sys
 from typing import List, Optional
 
 from .boot_harness import fetch_locked_to_cache, locked_artifact_path, verify_locked_artifact
-from .errors import FirmwaveError
+from .errors import FirmwareError
 from .interface import interface_path, interface_sha256, load_interface
 from .locks import lock_summary, validate_firmware_lock
 from .provenance import source_identity
@@ -23,17 +23,17 @@ def _json(value: object) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="neptune-firmwave",
+        prog="neptune-firmware",
         description="Audited P210 firmware inputs and a non-flashable QEMU development runtime",
     )
     parser.add_argument("--version", action="version", version="%(prog)s " + __version__)
     commands = parser.add_subparsers(dest="command", required=True)
 
-    interface = commands.add_parser("interface", help="show the canonical Twin/Firmwave interface")
+    interface = commands.add_parser("interface", help="show the canonical Twin/Firmware interface")
     interface.add_argument("--path", type=Path)
     interface.add_argument("--json", action="store_true")
 
-    source = commands.add_parser("source-identity", help="identify the exact Firmwave source state")
+    source = commands.add_parser("source-identity", help="identify the exact Firmware source state")
     source.add_argument("--root", type=Path)
     source.add_argument("--json", action="store_true")
 
@@ -86,7 +86,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             if args.json:
                 _json(value)
             else:
-                print("Firmwave locks: PASS (%d artifacts)" % len(value["artifacts"]))
+                print("Firmware locks: PASS (%d artifacts)" % len(value["artifacts"]))
             return 0
         if args.command == "fetch":
             lock = validate_firmware_lock(args.lock)
@@ -123,7 +123,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             else:
                 print("P210 XSA: %s" % ("PASS" if report.compatible else "FAIL"))
             return 0 if report.compatible else 1
-    except (FirmwaveError, OSError, ValueError, KeyError) as exc:
+    except (FirmwareError, OSError, ValueError, KeyError) as exc:
         print("error: %s" % exc, file=sys.stderr)
         return 2
     raise AssertionError("unhandled command")

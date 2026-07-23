@@ -1,6 +1,6 @@
 # Notices
 
-The source code in Atom-NeptuneSDR_Firmwave is licensed under the MIT License unless a
+The source code in Atom-NeptuneSDR-Firmware is licensed under the MIT License unless a
 file says otherwise. It was separated from the NeptuneSDR digital-twin work in
 2026 so firmware provenance, build inputs, and board-side interfaces have an
 independent release boundary.

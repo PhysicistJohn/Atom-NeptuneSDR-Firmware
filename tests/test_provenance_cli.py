@@ -10,8 +10,8 @@ import subprocess
 import tempfile
 import unittest
 
-from neptunesdr_firmwave.cli import main
-from neptunesdr_firmwave.provenance import _source_state, source_identity
+from neptunesdr_firmware.cli import main
+from neptunesdr_firmware.provenance import _source_state, source_identity
 
 
 def _sha256_file(path: Path) -> str:
@@ -74,8 +74,8 @@ def _twin_acceptance_source_state(root: Path):
 
 def _repository(root: Path) -> None:
     subprocess.run(("git", "init", "-b", "main"), cwd=root, check=True, stdout=subprocess.DEVNULL)
-    subprocess.run(("git", "config", "user.name", "Firmwave Test"), cwd=root, check=True)
-    subprocess.run(("git", "config", "user.email", "firmwave@example.invalid"), cwd=root, check=True)
+    subprocess.run(("git", "config", "user.name", "Firmware Test"), cwd=root, check=True)
+    subprocess.run(("git", "config", "user.email", "firmware@example.invalid"), cwd=root, check=True)
     (root / "tracked.bin").write_bytes(b"tracked\0bytes")
     subprocess.run(("git", "add", "tracked.bin"), cwd=root, check=True)
     subprocess.run(("git", "commit", "-m", "fixture"), cwd=root, check=True, stdout=subprocess.DEVNULL)
@@ -97,7 +97,7 @@ class ProvenanceTests(unittest.TestCase):
             _repository(root)
             identity = source_identity(root)
             tree = subprocess.check_output(("git", "rev-parse", "HEAD^{tree}"), cwd=root, text=True).strip()
-        self.assertEqual(identity["repository"], "Atom-NeptuneSDR_Firmwave")
+        self.assertEqual(identity["repository"], "Atom-NeptuneSDR-Firmware")
         self.assertEqual(identity["tree"], tree)
         self.assertTrue(identity["clean"])
         self.assertRegex(identity["state_sha256"], r"^[0-9a-f]{64}$")

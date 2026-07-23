@@ -10,7 +10,7 @@ from .interface import INTERFACE_SCHEMA, interface_sha256, load_interface
 from .provenance import source_identity
 
 
-RUNTIME_MANIFEST_SCHEMA = "neptunesdr.firmwave.runtime-manifest/v1"
+RUNTIME_MANIFEST_SCHEMA = "neptunesdr.firmware.runtime-manifest/v1"
 
 
 def file_record(path: Path, output_root: Path, *, role: str) -> Dict[str, object]:
@@ -60,7 +60,7 @@ def finish_runtime_manifest(
         "sha256": interface_sha256(),
         "abi_version": interface["pl_fft_abi"]["version"],
     }
-    manifest["firmwave_source"] = source_identity(source_root)
+    manifest["firmware_source"] = source_identity(source_root)
     manifest["generated_artifacts"] = records
     manifest["artifact_hashes_complete"] = True
     manifest["artifact_scope"] = (

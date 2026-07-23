@@ -1,17 +1,17 @@
-"""Domain-specific Firmwave failures."""
+"""Domain-specific Firmware failures."""
 
 
-class FirmwaveError(Exception):
+class FirmwareError(Exception):
     """Base class for failures with defined firmware-tooling semantics."""
 
 
-class FirmwareFormatError(FirmwaveError, ValueError):
+class FirmwareFormatError(FirmwareError, ValueError):
     """A firmware artifact is malformed or fails an integrity check."""
 
 
-class InterfaceError(FirmwaveError, ValueError):
+class InterfaceError(FirmwareError, ValueError):
     """The published firmware interface is absent or malformed."""
 
 
-class ProvenanceError(FirmwaveError, ValueError):
+class ProvenanceError(FirmwareError, ValueError):
     """A requested source identity cannot be established from Git."""

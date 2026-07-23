@@ -1,1 +1,1 @@
-"""Standalone Firmwave tests."""
+"""Standalone Firmware tests."""

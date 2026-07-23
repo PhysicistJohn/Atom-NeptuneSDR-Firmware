@@ -11,12 +11,12 @@ from unittest import mock
 import zipfile
 import zlib
 
-from neptunesdr_firmwave.boot_harness import BootArtifacts, build_qemu_command
-from neptunesdr_firmwave.errors import FirmwareFormatError
-from neptunesdr_firmwave.firmware import UIMAGE_MAGIC, UImage, fetch_locked_artifact
-from neptunesdr_firmwave.locks import validate_firmware_lock, validate_runtime_lock
-from neptunesdr_firmwave.runtime_rootfs import CpioEntry, NewcArchive
-from neptunesdr_firmwave.xsa import validate_xsa
+from neptunesdr_firmware.boot_harness import BootArtifacts, build_qemu_command
+from neptunesdr_firmware.errors import FirmwareFormatError
+from neptunesdr_firmware.firmware import UIMAGE_MAGIC, UImage, fetch_locked_artifact
+from neptunesdr_firmware.locks import validate_firmware_lock, validate_runtime_lock
+from neptunesdr_firmware.runtime_rootfs import CpioEntry, NewcArchive
+from neptunesdr_firmware.xsa import validate_xsa
 
 
 def _entry(name, data=b"", mode=0o100644, inode=1):
@@ -222,14 +222,14 @@ class LockBoundaryTests(unittest.TestCase):
             lock_path.write_text(json.dumps(lock), encoding="utf-8")
             destination = root / "item.bin"
             with mock.patch(
-                "neptunesdr_firmwave.firmware.urllib.request.urlopen",
+                "neptunesdr_firmware.firmware.urllib.request.urlopen",
                 return_value=io.BytesIO(payload),
             ):
                 self.assertEqual(fetch_locked_artifact("item", destination, lock_path), destination)
             self.assertEqual(destination.read_bytes(), payload)
 
             with mock.patch(
-                "neptunesdr_firmwave.firmware.urllib.request.urlopen",
+                "neptunesdr_firmware.firmware.urllib.request.urlopen",
                 return_value=io.BytesIO(payload + b"!"),
             ):
                 with self.assertRaises(FirmwareFormatError):

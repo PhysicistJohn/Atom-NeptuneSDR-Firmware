@@ -1,4 +1,4 @@
-"""Load and validate the canonical Twin/Firmwave interface document."""
+"""Load and validate the canonical Twin/Firmware interface document."""
 
 from __future__ import annotations
 
@@ -27,15 +27,15 @@ def repository_root() -> Optional[Path]:
 def interface_path(explicit: Optional[Path] = None) -> Path:
     if explicit is not None:
         candidate = Path(explicit)
-    elif os.environ.get("NEPTUNE_FIRMWAVE_INTERFACE"):
-        candidate = Path(os.environ["NEPTUNE_FIRMWAVE_INTERFACE"])
+    elif os.environ.get("NEPTUNE_FIRMWARE_INTERFACE"):
+        candidate = Path(os.environ["NEPTUNE_FIRMWARE_INTERFACE"])
     else:
         root = repository_root()
         if root is not None:
             candidate = root / "specs" / INTERFACE_NAME
         else:
             data_root = Path(sysconfig.get_path("data"))
-            candidate = data_root / "share" / "neptunesdr-firmwave" / "specs" / INTERFACE_NAME
+            candidate = data_root / "share" / "neptunesdr-firmware" / "specs" / INTERFACE_NAME
     if not candidate.is_file():
         raise InterfaceError("canonical interface is missing: %s" % candidate)
     return candidate.resolve()

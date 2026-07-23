@@ -15,8 +15,8 @@ SOURCE = REPOSITORY / "src"
 if str(SOURCE) not in sys.path:
     sys.path.insert(0, str(SOURCE))
 
-from neptunesdr_firmwave.boot_harness import fetch_locked_to_cache  # noqa: E402
-from neptunesdr_firmwave.firmware import load_firmware_lock  # noqa: E402
+from neptunesdr_firmware.boot_harness import fetch_locked_to_cache  # noqa: E402
+from neptunesdr_firmware.firmware import load_firmware_lock  # noqa: E402
 
 
 def _parser() -> argparse.ArgumentParser:

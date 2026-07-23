@@ -17,14 +17,14 @@ SOURCE_TREE = REPOSITORY / "src"
 if str(SOURCE_TREE) not in sys.path:
     sys.path.insert(0, str(SOURCE_TREE))
 
-from neptunesdr_firmwave.boot_harness import (  # noqa: E402
+from neptunesdr_firmware.boot_harness import (  # noqa: E402
     extract_boot_artifacts,
     fetch_locked_to_cache,
     locked_artifact_path,
     verify_locked_artifact,
 )
-from neptunesdr_firmwave.errors import FirmwareFormatError  # noqa: E402
-from neptunesdr_firmwave.firmware import (  # noqa: E402
+from neptunesdr_firmware.errors import FirmwareFormatError  # noqa: E402
+from neptunesdr_firmware.firmware import (  # noqa: E402
     DFUSuffix,
     FlattenedDeviceTree,
     load_firmware_lock,
@@ -188,7 +188,7 @@ def _validate_pluto(path: Path) -> Dict[str, object]:
         if zipfile.is_zipfile(path):
             artifacts = extract_boot_artifacts(path, Path(temporary))
         else:
-            from neptunesdr_firmwave.boot_harness import extract_fit_image
+            from neptunesdr_firmware.boot_harness import extract_fit_image
 
             artifacts = extract_fit_image(fit_for_extraction or b"", Path(temporary), source_name=str(path))
         result["extraction"] = _artifact_summary(artifacts)

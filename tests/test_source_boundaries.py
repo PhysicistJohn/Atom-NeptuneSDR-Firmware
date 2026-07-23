@@ -46,8 +46,8 @@ class SourceBoundaryTests(unittest.TestCase):
     def test_interface_and_runtime_locks_are_valid_json_objects(self):
         paths = (
             ROOT / "specs" / "p210-firmware-interface-v1.json",
-            ROOT / "src" / "neptunesdr_firmwave" / "data" / "firmware-lock.json",
-            ROOT / "src" / "neptunesdr_firmwave" / "data" / "runtime-lock.json",
+            ROOT / "src" / "neptunesdr_firmware" / "data" / "firmware-lock.json",
+            ROOT / "src" / "neptunesdr_firmware" / "data" / "runtime-lock.json",
         )
         for path in paths:
             self.assertIsInstance(json.loads(path.read_text(encoding="utf-8")), dict, path)

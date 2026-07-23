@@ -1,8 +1,8 @@
 {
   "schema": "neptunesdr.p210-firmware-interface/v1",
   "repository": {
-    "name": "Atom-NeptuneSDR_Firmwave",
-    "url": "https://github.com/PhysicistJohn/Atom-NeptuneSDR_Firmwave"
+    "name": "Atom-NeptuneSDR-Firmware",
+    "url": "https://github.com/PhysicistJohn/Atom-NeptuneSDR-Firmware"
   },
   "profile": "qemu-development",
   "flashable": false,
@@ -153,12 +153,12 @@
     "linux_memory_limit": "384M"
   },
   "runtime_inputs": {
-    "lock": "src/neptunesdr_firmwave/data/firmware-lock.json",
+    "lock": "src/neptunesdr_firmware/data/firmware-lock.json",
     "composition": "public P210 kernel/device tree plus official PlutoSDR v0.39 initramfs",
     "classification": "ABI-compatible experimental composition; not vendor P210 firmware"
   },
   "produced_artifacts": {
-    "runtime_manifest_schema": "neptunesdr.firmwave.runtime-manifest/v1",
+    "runtime_manifest_schema": "neptunesdr.firmware.runtime-manifest/v1",
     "kernel": "p210-kernel.bin",
     "devicetree": "p210-devicetree.dtb",
     "rootfs": "pluto-v0.39-rootfs.cpio.gz",

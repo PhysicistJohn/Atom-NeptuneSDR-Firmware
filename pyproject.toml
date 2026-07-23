@@ -3,13 +3,13 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "neptunesdr-firmwave"
+name = "neptunesdr-firmware"
 version = "1.0.0"
 description = "Audited firmware inputs and QEMU-development runtime for NeptuneSDR/HAMGEEK P210"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
-authors = [{ name = "Atom-NeptuneSDR_Firmwave contributors" }]
+authors = [{ name = "Atom-NeptuneSDR-Firmware contributors" }]
 dependencies = []
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -19,11 +19,11 @@ classifiers = [
 ]
 
 [project.urls]
-Repository = "https://github.com/PhysicistJohn/Atom-NeptuneSDR_Firmwave"
-Issues = "https://github.com/PhysicistJohn/Atom-NeptuneSDR_Firmwave/issues"
+Repository = "https://github.com/PhysicistJohn/Atom-NeptuneSDR-Firmware"
+Issues = "https://github.com/PhysicistJohn/Atom-NeptuneSDR-Firmware/issues"
 
 [project.scripts]
-neptune-firmwave = "neptunesdr_firmwave.cli:main"
+neptune-firmware = "neptunesdr_firmware.cli:main"
 
 [tool.setuptools]
 package-dir = { "" = "src" }
@@ -32,8 +32,8 @@ package-dir = { "" = "src" }
 where = ["src"]
 
 [tool.setuptools.package-data]
-neptunesdr_firmwave = ["data/*.json"]
+neptunesdr_firmware = ["data/*.json"]
 
 [tool.setuptools.data-files]
-"share/neptunesdr-firmwave/specs" = ["specs/p210-firmware-interface-v1.json"]
-"share/neptunesdr-firmwave/docs" = ["docs/P210_FFT_ABI.md"]
+"share/neptunesdr-firmware/specs" = ["specs/p210-firmware-interface-v1.json"]
+"share/neptunesdr-firmware/docs" = ["docs/P210_FFT_ABI.md"]

@@ -15,13 +15,13 @@ for script in scripts/*.sh; do
 done
 sh -n scripts/build_guest_fft.sh
 
-python3 -m neptunesdr_firmwave validate-locks --json >/dev/null
-python3 -m neptunesdr_firmwave interface --json >/dev/null
-python3 -m neptunesdr_firmwave source-identity --json >/dev/null
+python3 -m neptunesdr_firmware validate-locks --json >/dev/null
+python3 -m neptunesdr_firmware interface --json >/dev/null
+python3 -m neptunesdr_firmware source-identity --json >/dev/null
 python3 scripts/fetch_firmware.py --help >/dev/null
 python3 scripts/test_firmware.py --help >/dev/null
 python3 scripts/prepare_runtime.py --help >/dev/null
 python3 scripts/qemu_boot.py --help >/dev/null
 git diff --check
 
-printf 'NEPTUNE_FIRMWAVE_SOURCE_GATE PASS\n'
+printf 'NEPTUNE_FIRMWARE_SOURCE_GATE PASS\n'

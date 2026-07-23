@@ -8,8 +8,8 @@ import subprocess
 import tempfile
 import unittest
 
-from neptunesdr_firmwave.interface import INTERFACE_SCHEMA, interface_path, interface_sha256, load_interface
-from neptunesdr_firmwave.manifest import RUNTIME_MANIFEST_SCHEMA, finish_runtime_manifest
+from neptunesdr_firmware.interface import INTERFACE_SCHEMA, interface_path, interface_sha256, load_interface
+from neptunesdr_firmware.manifest import RUNTIME_MANIFEST_SCHEMA, finish_runtime_manifest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,8 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def _committed_repository(path: Path) -> None:
     subprocess.run(("git", "init", "-b", "main"), cwd=path, check=True, stdout=subprocess.DEVNULL)
-    subprocess.run(("git", "config", "user.name", "Firmwave Test"), cwd=path, check=True)
-    subprocess.run(("git", "config", "user.email", "firmwave@example.invalid"), cwd=path, check=True)
+    subprocess.run(("git", "config", "user.name", "Firmware Test"), cwd=path, check=True)
+    subprocess.run(("git", "config", "user.email", "firmware@example.invalid"), cwd=path, check=True)
     (path / "source.txt").write_text("fixed source\n", encoding="utf-8")
     subprocess.run(("git", "add", "source.txt"), cwd=path, check=True)
     subprocess.run(("git", "commit", "-m", "fixture"), cwd=path, check=True, stdout=subprocess.DEVNULL)
@@ -28,7 +28,7 @@ class InterfaceTests(unittest.TestCase):
     def test_canonical_interface_carries_wideband_fft_and_transport_contacts(self):
         interface = load_interface()
         self.assertEqual(interface["schema"], INTERFACE_SCHEMA)
-        self.assertEqual(interface["repository"]["name"], "Atom-NeptuneSDR_Firmwave")
+        self.assertEqual(interface["repository"]["name"], "Atom-NeptuneSDR-Firmware")
         self.assertEqual(interface["profile"], "qemu-development")
         self.assertIs(interface["flashable"], False)
         self.assertEqual(interface["wideband_capture"]["sample_rate_hz"], 61_440_000)
@@ -188,8 +188,8 @@ class RuntimeManifestTests(unittest.TestCase):
             manifest["generated_artifacts"]["kernel"]["sha256"],
             hashlib.sha256(b"kernel").hexdigest(),
         )
-        self.assertEqual(manifest["firmwave_source"]["repository"], "Atom-NeptuneSDR_Firmwave")
-        self.assertTrue(manifest["firmwave_source"]["clean"])
+        self.assertEqual(manifest["firmware_source"]["repository"], "Atom-NeptuneSDR-Firmware")
+        self.assertTrue(manifest["firmware_source"]["clean"])
         self.assertTrue(manifest["artifact_hashes_complete"])
 
     def test_manifest_rejects_an_artifact_outside_runtime(self):

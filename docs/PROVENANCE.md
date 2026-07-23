@@ -1,8 +1,8 @@
 # Firmware provenance and evidence boundary
 
-Firmwave produces a development runtime from three immutable public inputs.
+Firmware produces a development runtime from three immutable public inputs.
 Their URLs, exact byte counts, SHA-256 digests, kinds, and evidence levels live
-in `src/neptunesdr_firmwave/data/firmware-lock.json`:
+in `src/neptunesdr_firmware/data/firmware-lock.json`:
 
 - a public P210 SD boot partition and XSA from the community
   `Neptune-SDR-nix-utils` commit pinned by the URLs;
@@ -21,7 +21,7 @@ conflicts with the Pluto gadget rootfs at the USB-controller role, and the
 pinned community recipe reports that AD9361 was non-functional. Those facts
 are retained as manifest limitations instead of being papered over.
 
-The runtime manifest captures the exact Firmwave commit/tree/source state,
+The runtime manifest captures the exact Firmware commit/tree/source state,
 canonical interface hash, input hashes, and every published runtime artifact
 hash. This makes a digital-twin execution reproducible; it does not establish
 physical RF, timing closure, DDR coherency, USB electrical behavior, or safe

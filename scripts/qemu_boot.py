@@ -17,7 +17,7 @@ SOURCE_TREE = REPOSITORY / "src"
 if str(SOURCE_TREE) not in sys.path:
     sys.path.insert(0, str(SOURCE_TREE))
 
-from neptunesdr_firmwave.boot_harness import (  # noqa: E402
+from neptunesdr_firmware.boot_harness import (  # noqa: E402
     DEFAULT_LOG_PATTERNS,
     build_qemu_command,
     extract_boot_artifacts,
@@ -26,7 +26,7 @@ from neptunesdr_firmwave.boot_harness import (  # noqa: E402
     run_qemu_boot,
     verify_locked_artifact,
 )
-from neptunesdr_firmwave.firmware import load_firmware_lock  # noqa: E402
+from neptunesdr_firmware.firmware import load_firmware_lock  # noqa: E402
 
 
 def _parser() -> argparse.ArgumentParser:

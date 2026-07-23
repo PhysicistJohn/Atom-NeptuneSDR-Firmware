@@ -1,14 +1,14 @@
-# Atom-NeptuneSDR_Firmwave
+# Atom-NeptuneSDR-Firmware
 
-Firmwave is the firmware half of the NeptuneSDR/HAMGEEK P210 development
+Firmware is the firmware half of the NeptuneSDR/HAMGEEK P210 development
 environment. It owns immutable firmware inputs, hostile-input parsers,
 P210/Xilinx handoff validation, the ARM guest FFT streamer, the board-side FFT
 ABI, and assembly of a QEMU-development runtime. The digital twin lives in a
 separate repository and consumes the machine-readable interface and emitted
 runtime manifest.
 
-The exact repository identity is `Atom-NeptuneSDR_Firmwave`, published at
-<https://github.com/PhysicistJohn/Atom-NeptuneSDR_Firmwave>.
+The exact repository identity is `Atom-NeptuneSDR-Firmware`, published at
+<https://github.com/PhysicistJohn/Atom-NeptuneSDR-Firmware>.
 
 ## What this produces
 
@@ -38,9 +38,9 @@ Python 3.9 or newer is sufficient for artifact inspection:
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install -e .
-neptune-firmwave validate-locks
-neptune-firmwave interface
-neptune-firmwave source-identity
+neptune-firmware validate-locks
+neptune-firmware interface
+neptune-firmware source-identity
 scripts/check.sh
 ```
 
@@ -48,7 +48,7 @@ None of those commands contacts or flashes a board. `fetch` writes only to a
 host content-addressed cache:
 
 ```sh
-neptune-firmwave fetch --cache-dir .cache/firmware
+neptune-firmware fetch --cache-dir .cache/firmware
 python3 scripts/test_firmware.py --fetch --json
 ```
 
@@ -60,8 +60,8 @@ The ARM guest is pinned to Zig 0.14.1. Point `ZIG` at that executable and run:
 ZIG=/path/to/zig-0.14.1 scripts/build_bundle.sh
 ```
 
-Optional locations are controlled by `FIRMWAVE_CACHE_DIR`,
-`FIRMWAVE_RUNTIME_OUTPUT`, and `P210_GUEST_OUTPUT`. The script builds the guest,
+Optional locations are controlled by `FIRMWARE_CACHE_DIR`,
+`FIRMWARE_RUNTIME_OUTPUT`, and `P210_GUEST_OUTPUT`. The script builds the guest,
 fetches and verifies every locked input, validates both boot environments and
 the XSA, then prepares the FFT runtime and `runtime-manifest.json`.
 
@@ -82,7 +82,7 @@ USB or block devices. See [the FFT ABI](docs/P210_FFT_ABI.md),
 
 ## Ownership boundary
 
-Firmwave owns guest firmware source, firmware inputs/locks, extraction and ABI
+Firmware owns guest firmware source, firmware inputs/locks, extraction and ABI
 audit, the canonical board-side interface, and firmware-specific tests. The
 separate twin owns behavioral radio/SoC models, QEMU device models, USB/network
 emulation, host-side protocol clients, and end-to-end acceptance orchestration.

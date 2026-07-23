@@ -1,4 +1,4 @@
-"""Reproducible identity for the exact Firmwave source state."""
+"""Reproducible identity for the exact Firmware source state."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from .errors import ProvenanceError
 from .interface import repository_root
 
 
-REPOSITORY_NAME = "Atom-NeptuneSDR_Firmwave"
+REPOSITORY_NAME = "Atom-NeptuneSDR-Firmware"
 
 
 def _sha256_bytes(payload: bytes) -> str:
@@ -38,7 +38,7 @@ def _git_root(root: Path) -> Path:
     except (OSError, subprocess.CalledProcessError) as exc:
         raise ProvenanceError(
             "source identity requires a Git checkout; pass --root for the "
-            "Atom-NeptuneSDR_Firmwave checkout"
+            "Atom-NeptuneSDR-Firmware checkout"
         ) from exc
     try:
         source = Path(rendered.decode("utf-8").strip()).resolve(strict=True)

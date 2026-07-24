@@ -44,6 +44,11 @@ neptune-firmware source-identity
 scripts/check.sh
 ```
 
+`scripts/check.sh` is the no-network source gate: byte-compilation, a
+`-Werror` syntax check of the guest C, 24 unit tests, a parse check of every
+shell script, and the JSON CLIs. It is the cheap proof that a clone works, and
+it finishes in roughly 15 seconds.
+
 None of those commands contacts or flashes a board. `fetch` writes only to a
 host content-addressed cache:
 
@@ -54,14 +59,33 @@ python3 scripts/test_firmware.py --fetch --json
 
 ## Build the QEMU-development bundle
 
-The ARM guest is pinned to Zig 0.14.1. Point `ZIG` at that executable and run:
+The ARM guest is pinned to Zig 0.14.1, and the build refuses any other version.
+`scripts/build_guest_fft.sh` looks for it at `.cache/fft-toolchain/bin/zig`
+unless `ZIG` is set. That path is gitignored, so a fresh clone must supply the
+toolchain first. Either install the pinned compiler into the default prefix:
 
 ```sh
-ZIG=/path/to/zig-0.14.1 scripts/build_bundle.sh
+mamba create -y -p .cache/fft-toolchain zig=0.14.1
 ```
 
+or unpack the upstream tarball for your platform and point `ZIG` at it:
+
+```sh
+curl -LO https://ziglang.org/download/0.14.1/zig-aarch64-macos-0.14.1.tar.xz
+tar xf zig-aarch64-macos-0.14.1.tar.xz
+ZIG=$PWD/zig-aarch64-macos-0.14.1/zig scripts/build_bundle.sh
+```
+
+Substitute `zig-x86_64-macos-0.14.1` or `zig-x86_64-linux-0.14.1` as needed. If
+a previous run already created `.cache/fft-toolchain`, it holds a relocation
+stamp, and `mamba` will refuse to populate a non-empty prefix; remove that
+directory first or use the tarball route.
+
 Optional locations are controlled by `FIRMWARE_CACHE_DIR`,
-`FIRMWARE_RUNTIME_OUTPUT`, and `P210_GUEST_OUTPUT`. The script builds the guest,
+`FIRMWARE_RUNTIME_OUTPUT`, and `P210_GUEST_OUTPUT`.
+`NEPTUNE_FIRMWARE_INTERFACE` overrides the path to the canonical interface
+JSON, and `QEMU_SYSTEM_ARM` selects the `qemu-system-arm` executable used by
+`qemu_boot.py` when it is not on `PATH`. The script builds the guest,
 fetches and verifies every locked input, validates both boot environments and
 the XSA, then prepares the FFT runtime and `runtime-manifest.json`.
 
